@@ -6,14 +6,42 @@ readme = "README.md"
 license = { text = "MIT" }
 authors = [ { name = "Giovanni Giacometti", email = "giovanni.giacometti5@gmail.com" } ]
 requires-python = ">=3.12"
-dependencies = [
-    "loguru>=0.7.3",
+
+
+[tool.poe.tasks]
+format = "ruff format --line-length 120"
+check = "ruff check . --fix"
+test = "pytest --verbose --color=yes tests"
+_lint_mypy = "mypy --ignore-missing-imports --install-types --non-interactive --package python_repo_template"
+_init_install-hooks = "pre-commit install"
+
+[[tool.poe.tasks.lint]]
+sequence = [
+    "check",
+    "_lint_mypy"
 ]
+ignore_fail = 'return_non_zero'
+
+[[tool.poe.tasks.init]]
+sequence = [
+    "_init_install-hooks"
+]
+ignore_fail = 'return_non_zero'
+
+[[tool.poe.tasks.validate]]
+sequence = [
+    "format",
+    "lint",
+    "test"
+]
+ignore_fail = 'return_non_zero'
 
 [dependency-groups]
 dev = [
     "mypy>=1.15.0",
+    "poethepoet>=0.33.1",
     "pre-commit>=4.1.0",
     "pytest>=8.3.4",
     "ruff>=0.9.5",
+    "update-toml>=0.2.1",
 ]
