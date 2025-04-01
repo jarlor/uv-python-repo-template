@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.4.0 (2025-04-01)
+
+### Features
+
+- Downgrade required Python version from 3.12 to 3.10 in pyproject.toml and update .python-version
+  ([`6bb2ffd`](https://github.com/jarlor/uv-python-repo-template/commit/6bb2ffd4aeece1e1b11111a44ffb9e7cc44c786b))
+
+
 ## v0.3.0 (2025-04-01)
 
 ### Documentation
