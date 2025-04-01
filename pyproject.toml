@@ -1,19 +1,39 @@
 [project]
-name = "python-repo-template"
+name = "uv_python_repo_template"
 version = "0.1.0"
-description = "A template for Python projects"
+description = "A Python project template using UV for project manager"
 readme = "README.md"
 license = { text = "MIT" }
-authors = [ { name = "Giovanni Giacometti", email = "giovanni.giacometti5@gmail.com" } ]
+authors = [{ name = "jarlor", email = "jarlorzhang@outlook.com" }]
 requires-python = ">=3.12"
 
 
 [tool.poe.tasks]
+# lint and format tasks
 format = "ruff format --line-length 120"
 check = "ruff check . --fix"
+_lint_mypy = "mypy --ignore-missing-imports --install-types --non-interactive --package uv_python_repo_template"
+
+# test tasks
 test = "pytest --verbose --color=yes tests"
-_lint_mypy = "mypy --ignore-missing-imports --install-types --non-interactive --package python_repo_template"
+
+# init tasks
 _init_install-hooks = "pre-commit install"
+
+# semversioner tasks
+_semversioner_release = "semversioner release"
+_semversioner_changelog = { shell = "semversioner changelog > CHANGELOG.md" }
+_semversioner_update_toml_version = { shell = "update-toml update --path project.version --value $(semversioner current-version)" }
+semversioner_add = "semversioner add-change"
+
+
+
+[[tool.poe.tasks.release]]
+sequence = [
+    '_semversioner_release',
+    '_semversioner_changelog',
+    '_semversioner_update_toml_version',
+]
 
 [[tool.poe.tasks.lint]]
 sequence = [
@@ -42,6 +62,8 @@ dev = [
     "poethepoet>=0.33.1",
     "pre-commit>=4.1.0",
     "pytest>=8.3.4",
+    "python-semantic-release>=9.21.0",
     "ruff>=0.9.5",
+    "semversioner>=2.0.5",
     "update-toml>=0.2.1",
 ]
