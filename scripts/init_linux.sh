@@ -16,11 +16,17 @@ else
     exit 1
 fi
 
-# 2. Rename the directory
+# 2. Rename the directory and delete the .venv directory
 if [ -d "src/uv_python_repo_template" ]; then
-    mv "src/uv_python_repo_template" "$dir_name"
+    mv "src/uv_python_repo_template" "src/$dir_name"
 else
     echo "Warning: 'src/uv_python_repo_template' directory not found, skipping renaming" >&2
+fi
+
+if [ -d ".venv" ]; then
+  rm -rf ".venv"
+else
+  echo "Warning: '.venv' directory not found, skipping deletion" >&2
 fi
 
 # 3. Run the init command
