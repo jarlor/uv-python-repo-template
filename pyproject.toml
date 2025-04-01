@@ -20,7 +20,7 @@ build-backend = "hatchling.build"
 # lint and format tasks
 format = "ruff format --line-length 120"
 check = "ruff check . --fix"
-_lint_mypy = "mypy --ignore-missing-imports --install-types --non-interactive --package uv_python_repo_template"
+_lint_mypy = "mypy --ignore-missing-imports --install-types --non-interactive --package src.uv_python_repo_template"
 
 # test tasks
 test = "pytest --verbose --color=yes tests"
@@ -54,7 +54,6 @@ ignore_fail = 'return_non_zero'
 
 [[tool.poe.tasks.validate]]
 sequence = [
-    "format",
     "lint",
     "test"
 ]
