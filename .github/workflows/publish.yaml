@@ -2,6 +2,7 @@ name: Publish to PyPI
 
 on:
   push:
+    branches: main
     tags:
       - 'v*'
 
@@ -18,10 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"  # 与 .python-version 文件配合使用
-
-      - name: Install build dependencies
-        run: uv sync pyproject.toml
+          python-version-file: ".python-version"
 
       - name: Build package
         run: uv build
