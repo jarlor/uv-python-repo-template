@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v0.5.0 (2025-04-01)
+
+### Features
+
+- Update publish.yaml to specify main branch for push events and use python-version-file for Python
+  setup
+  ([`dce0ee2`](https://github.com/jarlor/uv-python-repo-template/commit/dce0ee284813db6bdb8dc2e3c9820f5bcd4a8b6b))
+
+
 ## v0.4.0 (2025-04-01)
 
 ### Features
