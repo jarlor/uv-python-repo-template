@@ -20,19 +20,15 @@ test = "pytest --verbose --color=yes tests"
 # init tasks
 _init_install-hooks = "pre-commit install"
 
-# semversioner tasks
-_semversioner_release = "semversioner release"
-_semversioner_changelog = { shell = "semversioner changelog > CHANGELOG.md" }
-_semversioner_update_toml_version = { shell = "update-toml update --path project.version --value $(semversioner current-version)" }
-semversioner_add = "semversioner add-change"
+# semantic-release tasks
+_release_changelog = "semantic-release changelog"
+_release_version = "semantic-release version --no-push"
 
 
-
-[[tool.poe.tasks.release]]
+[[tool.poe.tasks.tag]]
 sequence = [
-    '_semversioner_release',
-    '_semversioner_changelog',
-    '_semversioner_update_toml_version',
+    "_release_changelog",
+    "_release_version"
 ]
 
 [[tool.poe.tasks.lint]]
@@ -64,6 +60,5 @@ dev = [
     "pytest>=8.3.4",
     "python-semantic-release>=9.21.0",
     "ruff>=0.9.5",
-    "semversioner>=2.0.5",
     "update-toml>=0.2.1",
 ]
