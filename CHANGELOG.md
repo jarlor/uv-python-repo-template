@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## Unreleased
+
+### Documentation
+
+- Adjust pyproject.toml
+  ([`e8ac10d`](https://github.com/jarlor/uv-python-repo-template/commit/e8ac10d20c848378b74eb6fb75d2012d88f1d86b))
+
+
 ## v0.2.0 (2025-04-01)
 
 ### Features

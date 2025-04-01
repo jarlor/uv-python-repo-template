@@ -8,6 +8,14 @@ authors = [{ name = "jarlor", email = "jarlorzhang@outlook.com" }]
 requires-python = ">=3.12"
 
 
+
+[project.scripts]
+uv_python_repo_template = "uv_python_repo_template:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [tool.poe.tasks]
 # lint and format tasks
 format = "ruff format --line-length 120"

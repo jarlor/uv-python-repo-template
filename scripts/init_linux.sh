@@ -17,10 +17,10 @@ else
 fi
 
 # 2. Rename the directory
-if [ -d "uv_python_repo_template" ]; then
-    mv "uv_python_repo_template" "$dir_name"
+if [ -d "src/uv_python_repo_template" ]; then
+    mv "src/uv_python_repo_template" "$dir_name"
 else
-    echo "Warning: 'uv_python_repo_template' directory not found, skipping renaming" >&2
+    echo "Warning: 'src/uv_python_repo_template' directory not found, skipping renaming" >&2
 fi
 
 # 3. Run the init command
