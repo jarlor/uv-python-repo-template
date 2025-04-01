@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.2.0 (2025-04-01)
+
+### Features
+
+- Add new func
+  ([`deb6b23`](https://github.com/jarlor/uv-python-repo-template/commit/deb6b23b93300759b3123cad8060ca836b80dfd2))
+
+
+## v0.0.0 (2025-04-01)
+
+
 ## v0.1.0 (2025-04-01)
 
 ### Features
