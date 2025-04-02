@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.21.0 (2025-04-02)
+
+### Features
+
+- Rename changelog step and add script to extract release notes
+  ([`58bcc3e`](https://github.com/jarlor/uv-python-repo-template/commit/58bcc3e55cfb317d847d425e0b36f16b7f561a5d))
+
+
 ## v0.20.0 (2025-04-02)
 
 ### Features
