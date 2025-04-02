@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.17.0 (2025-04-02)
+
+### Features
+
+- Rename step for updating release draft in workflow
+  ([`3362c5c`](https://github.com/jarlor/uv-python-repo-template/commit/3362c5c9b89dfa500f203e1ff9570b8c8596f67f))
+
+
 ## v0.16.0 (2025-04-02)
 
 ### Features
