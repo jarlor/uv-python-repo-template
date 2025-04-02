@@ -26,7 +26,7 @@ jobs:
       - name: Extract Release Notes
         id: github_release
         run: |
-          bash scripts/extract-release_notes.sh
+          bash scripts/extract_release_notes.sh
 
 
       - name: Create Release
