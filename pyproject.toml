@@ -72,5 +72,7 @@ dev = [
 ]
 
 
+[semantic_release]
+assets = ["pyproject.toml"]
 [semantic_release.remote]
 ignore_token_for_push = true
