@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.21.1 (2025-04-02)
+
+### Bug Fixes
+
+- Correct script name for extracting release notes
+  ([`60c4a7b`](https://github.com/jarlor/uv-python-repo-template/commit/60c4a7b9ea445dfc2f28cee20d22a8a69ae7a816))
+
+
 ## v0.21.0 (2025-04-02)
 
 ### Features
