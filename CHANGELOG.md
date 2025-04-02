@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.14.0 (2025-04-02)
+
+### Features
+
+- Update release workflow to remove main branch trigger and use ACTION_GITHUB_TOKEN
+  ([`7b7345c`](https://github.com/jarlor/uv-python-repo-template/commit/7b7345c9546d3a1e8d019baee6af30f920202840))
+
+
 ## v0.13.0 (2025-04-02)
 
 ### Features
