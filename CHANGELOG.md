@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.12.0 (2025-04-02)
+
+### Features
+
+- Update release workflow to trigger on pushes to the main branch
+  ([`7717994`](https://github.com/jarlor/uv-python-repo-template/commit/771799424578eec518424ba2c3796d87f475dbec))
+
+
 ## v0.11.0 (2025-04-02)
 
 ### Features
