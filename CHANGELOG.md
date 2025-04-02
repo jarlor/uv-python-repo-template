@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## Unreleased
+
+### Features
+
+- Update CHANGELOG for v0.7.0 and modify semantic-release tasks in pyproject.toml
+  ([`4df01c4`](https://github.com/jarlor/uv-python-repo-template/commit/4df01c44cb7daed8e7f595a6e8fb98f0e78b997f))
+
+
 ## v0.7.0 (2025-04-02)
 
 ### Features
