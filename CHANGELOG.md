@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.15.0 (2025-04-02)
+
+### Features
+
+- Update release workflow to use ACTION_GITHUB_TOKEN and add release drafter configuration
+  ([`f0678d5`](https://github.com/jarlor/uv-python-repo-template/commit/f0678d5f1d1330dfb957048dd04b560fed3b8084))
+
+
 ## v0.14.0 (2025-04-02)
 
 ### Features
