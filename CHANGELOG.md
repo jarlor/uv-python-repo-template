@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.13.0 (2025-04-02)
+
+### Features
+
+- Update release workflow to support version tags without patch numbers
+  ([`6c343ec`](https://github.com/jarlor/uv-python-repo-template/commit/6c343ec43036c49297f926d658b35f6bfae15043))
+
+
 ## v0.12.0 (2025-04-02)
 
 ### Features
