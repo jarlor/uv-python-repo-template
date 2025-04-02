@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.21.2 (2025-04-02)
+
+### Bug Fixes
+
+- Redirect output of release notes extraction to a file
+  ([`96386cf`](https://github.com/jarlor/uv-python-repo-template/commit/96386cfd4cd0a2763d10b0c2030dddb056ff930e))
+
+
 ## v0.21.1 (2025-04-02)
 
 ### Bug Fixes
