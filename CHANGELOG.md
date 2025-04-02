@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.18.0 (2025-04-02)
+
+### Features
+
+- Rename job for GitHub release and update steps for changelog generation
+  ([`4ff94f7`](https://github.com/jarlor/uv-python-repo-template/commit/4ff94f7aa342f207f3d56c486645be1e844262d8))
+
+
 ## v0.17.0 (2025-04-02)
 
 ### Features
