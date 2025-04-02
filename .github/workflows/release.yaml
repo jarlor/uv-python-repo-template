@@ -29,7 +29,15 @@ jobs:
         with:
           draft: true
           token: ${{ secrets.ACTION_GITHUB_TOKEN }}
-          body_path: ./CHANGELOG.md
           files: |
-            ./build/**
-            ./CHANGELOG.md
+            ./dist/**
+
+  update_release_draft:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_GITHUB_TOKEN }}
