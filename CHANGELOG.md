@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v0.7.0 (2025-04-02)
+
+### Features
+
+- Rename publish.yaml to publish.yaml.template
+  ([`88b2a1d`](https://github.com/jarlor/uv-python-repo-template/commit/88b2a1dc647b0a1005328d7c31576c97b025a48d))
+
+
+## v0.6.0 (2025-04-01)
+
+### Features
+
+- Remove outdated README content and streamline project description
+  ([`fdc01e2`](https://github.com/jarlor/uv-python-repo-template/commit/fdc01e20df3a67f5eecd2815c837056882089c85))
+
+
 ## v0.5.0 (2025-04-01)
 
 ### Features

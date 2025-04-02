@@ -29,14 +29,15 @@ test = "pytest --verbose --color=yes tests"
 _init_install-hooks = "pre-commit install"
 
 # semantic-release tasks
-_release_changelog = "semantic-release changelog"
-_release_version = "semantic-release version --no-push"
-
+_tag_changelog = "semantic-release changelog"
+_tag_version = "semantic-release version --no-push"
+_tag_update_toml_version = { cmd = "update-toml update --path project.version --value $(semantic-release version --print)" }
 
 [[tool.poe.tasks.tag]]
 sequence = [
-    "_release_changelog",
-    "_release_version"
+    "_tag_changelog",
+    "_tag_update_toml_version",
+    "_tag_version"
 ]
 
 [[tool.poe.tasks.lint]]
@@ -69,3 +70,7 @@ dev = [
     "ruff>=0.9.5",
     "update-toml>=0.2.1",
 ]
+
+
+[semantic_release.remote]
+ignore_token_for_push = true
