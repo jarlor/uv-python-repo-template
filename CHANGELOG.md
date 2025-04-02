@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.16.0 (2025-04-02)
+
+### Features
+
+- Update release workflow to use release drafter and adjust file paths for GitHub releases
+  ([`34be480`](https://github.com/jarlor/uv-python-repo-template/commit/34be480828e9882c21ea79648180f3e849735bc7))
+
+
 ## v0.15.0 (2025-04-02)
 
 ### Features
