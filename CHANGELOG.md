@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.20.0 (2025-04-02)
+
+### Features
+
+- Add tag parameters to release changelog builder action
+  ([`9dfc635`](https://github.com/jarlor/uv-python-repo-template/commit/9dfc63535a768bbb9189a344742c2397c00fa2eb))
+
+
 ## v0.19.0 (2025-04-02)
 
 ### Features
