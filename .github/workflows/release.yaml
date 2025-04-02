@@ -28,6 +28,9 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_GITHUB_TOKEN }}
+          to_tag: ${{ github.ref }} # current tag
+          from_tag: ${{ github.event.before }}
+
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
