@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.19.0 (2025-04-02)
+
+### Features
+
+- Update release action to include files and use ACTION_GITHUB_TOKEN
+  ([`b81b71e`](https://github.com/jarlor/uv-python-repo-template/commit/b81b71e7db3612545c087c396f3cb6b5832e6c7e))
+
+
 ## v0.18.0 (2025-04-02)
 
 ### Features
