@@ -1,6 +1,6 @@
 [project]
 name = "uv_python_repo_template"
-version = "0.1.0"
+version = "0.8.0"
 description = "A Python project template using UV for project manager"
 readme = "README.md"
 license = { text = "MIT" }
@@ -31,7 +31,7 @@ _init_install-hooks = "pre-commit install"
 # semantic-release tasks
 _tag_changelog = "semantic-release changelog"
 _tag_version = "semantic-release version --no-push"
-_tag_update_toml_version = { cmd = "update-toml update --path project.version --value $(semantic-release version --print)" }
+_tag_update_toml_version = { shell = "update-toml update --path project.version --value $(semantic-release version --print)" }
 
 [[tool.poe.tasks.tag]]
 sequence = [

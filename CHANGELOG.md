@@ -5,6 +5,9 @@
 
 ### Features
 
+- Update CHANGELOG for upcoming release and adjust semantic-release tasks
+  ([`4ca5d45`](https://github.com/jarlor/uv-python-repo-template/commit/4ca5d459ec8bf9f3c66582900d46c6600beba07f))
+
 - Update CHANGELOG for v0.7.0 and modify semantic-release tasks in pyproject.toml
   ([`4df01c4`](https://github.com/jarlor/uv-python-repo-template/commit/4df01c44cb7daed8e7f595a6e8fb98f0e78b997f))
 
