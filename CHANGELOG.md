@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.10.0 (2025-04-02)
+
+### Features
+
+- Add semantic_release configuration for asset management in pyproject.toml
+  ([`59a4c46`](https://github.com/jarlor/uv-python-repo-template/commit/59a4c466f6d996e9a033e34b2e52161f84c3cf7e))
+
+
 ## v0.9.0 (2025-04-02)
 
 ### Features
