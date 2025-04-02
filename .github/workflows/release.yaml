@@ -23,18 +23,15 @@ jobs:
       - name: Build package
         run: uv build
 
-      - name: Build Changelog
+      - name: Extract Release Notes
         id: github_release
-        uses: mikepenz/release-changelog-builder-action@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_GITHUB_TOKEN }}
-          to_tag: ${{ github.ref }} # current tag
-          from_tag: ${{ github.event.before }}
+        run: |
+          bash scripts/extract-release_notes.sh
 
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{steps.github_release.outputs.changelog}}
+          body: ${{steps.github_release.outputs}}
           files: dist/*
           token: ${{ secrets.ACTION_GITHUB_TOKEN }}
