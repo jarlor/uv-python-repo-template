@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.11.0 (2025-04-02)
+
+### Features
+
+- Rename release workflow from Publish to PyPI to Release to GitHub
+  ([`ec92aea`](https://github.com/jarlor/uv-python-repo-template/commit/ec92aeaaacfd10dd7fff080e330b41d565071158))
+
+
 ## v0.10.0 (2025-04-02)
 
 ### Features
