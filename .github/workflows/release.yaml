@@ -2,6 +2,8 @@ name: Release to GitHub
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*.*.*"
 
