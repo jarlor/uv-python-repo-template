@@ -26,12 +26,11 @@ jobs:
       - name: Extract Release Notes
         id: github_release
         run: |
-          bash scripts/extract_release_notes.sh
-
+          bash scripts/extract_release_notes.sh > release_notes.md
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{steps.github_release.outputs}}
+          body_path: release_notes.md
           files: dist/*
           token: ${{ secrets.ACTION_GITHUB_TOKEN }}
