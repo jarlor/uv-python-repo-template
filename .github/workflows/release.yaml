@@ -32,12 +32,7 @@ jobs:
           files: |
             ./dist/**
 
-  update_release_draft:
-    permissions:
-      contents: write
-      pull-requests: write
-    runs-on: ubuntu-latest
-    steps:
-      - uses: release-drafter/release-drafter@v6
+      - name: Update release draft
+        uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_GITHUB_TOKEN }}
