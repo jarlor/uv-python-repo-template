@@ -1,6 +1,18 @@
 # CHANGELOG
 
 
+## v0.9.0 (2025-04-02)
+
+### Features
+
+- Rename lint_test.yaml to lint_test.yaml.template and update publish workflow for versioning and
+  release
+  ([`c2af494`](https://github.com/jarlor/uv-python-repo-template/commit/c2af494a3530935f66835c9ca6f718814025cd78))
+
+- Update lint_test.yaml to remove Python 3.x from version matrix
+  ([`3cca2f1`](https://github.com/jarlor/uv-python-repo-template/commit/3cca2f14139dfe8fc13af10d1e06833acb22f756))
+
+
 ## v0.8.0 (2025-04-02)
 
 ### Features

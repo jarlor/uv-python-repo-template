@@ -1,6 +1,6 @@
 [project]
 name = "uv_python_repo_template"
-version = "0.8.0"
+version = "0.9.0"
 description = "A Python project template using UV for project manager"
 readme = "README.md"
 license = { text = "MIT" }
