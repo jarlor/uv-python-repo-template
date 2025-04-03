@@ -3,6 +3,14 @@
 
 ## Unreleased
 
+### Chores
+
+- Rename init_linux.sh to init.sh and update changelog for CI changes
+  ([`125ca99`](https://github.com/jarlor/uv-python-repo-template/commit/125ca99744bd1d9f781efa22988755c45f41c878))
+
+- Update .gitignore to include .pre-commit.log
+  ([`78d8223`](https://github.com/jarlor/uv-python-repo-template/commit/78d8223e985f3c4a71a23e0cfe99bd08d1727b29))
+
 ### Continuous Integration
 
 - Disable workflow lint_test

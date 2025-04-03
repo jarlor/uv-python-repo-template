@@ -34,15 +34,8 @@ _tag_version = "semantic-release version --no-push"
 _tag_update_toml_version = { shell = "update-toml update --path project.version --value $(semantic-release version --print)" }
 
 [tool.poe.tasks.action]
-help = "可用命令: --enable/--disable + release/publish"
 cmd = "python scripts/poe_action.py"
 
-[[tool.poe.tasks.tag]]
-sequence = [
-    "_tag_changelog",
-    "_tag_update_toml_version",
-    "_tag_version"
-]
 
 [[tool.poe.tasks.lint]]
 sequence = [
@@ -63,6 +56,17 @@ sequence = [
     "test"
 ]
 ignore_fail = 'return_non_zero'
+
+
+[[tool.poe.tasks.tag]]
+sequence = [
+    "lint",
+    "test",
+    "_tag_changelog",
+    "_tag_update_toml_version",
+    "_tag_version"
+]
+
 
 [dependency-groups]
 dev = [
