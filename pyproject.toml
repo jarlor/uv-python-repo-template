@@ -60,8 +60,7 @@ ignore_fail = 'return_non_zero'
 
 [[tool.poe.tasks.tag]]
 sequence = [
-    "lint",
-    "test",
+    "validate",
     "_tag_changelog",
     "_tag_update_toml_version",
     "_tag_version"
