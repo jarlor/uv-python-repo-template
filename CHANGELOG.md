@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.22.2 (2025-04-03)
+
+### Bug Fixes
+
+- Clean up comments and formatting in test cases
+  ([`9f95d05`](https://github.com/jarlor/uv-python-repo-template/commit/9f95d05f2ce373e2a8ce76301c6f7e4ba472e291))
+
+- Update pre-commit hook entry to use lint instead of format
+  ([`8c903ad`](https://github.com/jarlor/uv-python-repo-template/commit/8c903ad44817800cb84f03d27eeea5cd44de5b08))
+
+
 ## v0.22.1 (2025-04-03)
 
 ### Bug Fixes
