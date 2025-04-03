@@ -147,7 +147,7 @@ def git_commit(workflow_name: str, action: str):
     """Commit changes to Git"""
     try:
         subprocess.run(["git", "add", str(WORKFLOW_DIR)], check=True, capture_output=True, text=True)
-        commit_message = f"{action.capitalize()} workflow {workflow_name}"
+        commit_message = f"ci: {action} workflow {workflow_name}"
         subprocess.run(["git", "commit", "-m", commit_message], check=True, capture_output=True, text=True)
         logging.getLogger().success("Changes committed successfully")
     except subprocess.CalledProcessError as e:
