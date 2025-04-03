@@ -29,13 +29,9 @@ else
   echo "Warning: '.venv' directory not found, skipping deletion" >&2
 fi
 
-# 3. delete old .git directory and create a new one
-if [ -d ".git" ]; then
-    rm -rf ".git"
-else
-    echo "Warning: '.git' directory not found, skipping deletion" >&2
-fi
-git init
+# 3.add all the changes to the staging area
+git add pyproject.toml src/$dir_name
+git commit -m "build: rename project to $dir_name"
 
 # 4. Run the init command
 uv run poe init
