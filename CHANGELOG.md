@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.3.0 (2025-04-03)
+
+### Features
+
+- Add collaborators section to README
+  ([`29c5cfb`](https://github.com/jarlor/uv-python-repo-template/commit/29c5cfbfc262b27cdc9a1bf018665b6b409cde19))
+
+
 ## v1.2.0 (2025-04-03)
 
 ### Features
