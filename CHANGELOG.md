@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.2.0 (2025-04-03)
+
+### Features
+
+- Add GitHub Actions workflow to automate contributors list in README
+  ([`37bd4a8`](https://github.com/jarlor/uv-python-repo-template/commit/37bd4a8a88add95d119d4cf70c52e404bd768047))
+
+
 ## v1.1.0 (2025-04-03)
 
 ### Features
