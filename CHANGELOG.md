@@ -1,7 +1,12 @@
 # CHANGELOG
 
 
-## Unreleased
+## v0.24.0 (2025-04-03)
+
+### Features
+
+- Update commit message format for workflow actions and add unreleased section to changelog
+  ([`fc032c0`](https://github.com/jarlor/uv-python-repo-template/commit/fc032c0e9b42c3498cc63c4e3c422f9a0e95bcf3))
 
 
 ## v0.23.0 (2025-04-03)
