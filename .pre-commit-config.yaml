@@ -1,9 +1,14 @@
 repos:
   - repo: local
     hooks:
-      - id: format
-        name: format
+      - id: lint
+        name: Code Formatting
         entry: uv run poe lint
-        require_serial: true
         language: system
         pass_filenames: false
+        types: [python]
+        verbose: true
+        stages: [pre-commit]
+        args: []
+        require_serial: true
+        log_file: .pre-commit.log
