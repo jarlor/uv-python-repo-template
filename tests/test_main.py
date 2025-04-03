@@ -11,17 +11,16 @@ def add_numbers(a, b):
 @pytest.mark.parametrize(
     "a, b, expected",
     [
-        (1, 2, 3),  # 整数加法
-        (-5, 3, -2),  # 负数测试
-        (2.5, 3.5, 6.0),  # 浮点数加法
-        (0, 0, 0),  # 边界值测试
+        (1, 2, 3),
+        (-5, 3, -2),
+        (2.5, 3.5, 6.0),
+        (0, 0, 0),
     ],
 )
 def test_add_numbers(a, b, expected):
     assert add_numbers(a, b) == expected
 
 
-# 测试异常输入（非数字类型）
 def test_add_numbers_type_error():
     with pytest.raises(TypeError):
-        add_numbers("1", 2)  # 字符串输入应触发 TypeError
+        add_numbers("1", 2)  #
