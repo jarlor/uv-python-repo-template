@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.22.1 (2025-04-03)
+
+### Bug Fixes
+
+- Delete old .git directory before reinitializing
+  ([`666f4ec`](https://github.com/jarlor/uv-python-repo-template/commit/666f4ec2597722afe9653898711ae90cda5a45ed))
+
+
 ## v0.22.0 (2025-04-03)
 
 ### Features
