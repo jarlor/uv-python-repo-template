@@ -29,5 +29,13 @@ else
   echo "Warning: '.venv' directory not found, skipping deletion" >&2
 fi
 
-# 3. Run the init command
+# 3. delete old .git directory and create a new one
+if [ -d ".git" ]; then
+    rm -rf ".git"
+else
+    echo "Warning: '.git' directory not found, skipping deletion" >&2
+fi
+git init
+
+# 4. Run the init command
 uv run poe init
