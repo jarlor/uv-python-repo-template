@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.22.0 (2025-04-03)
+
+### Features
+
+- Update release workflow to extract release notes and improve tagging
+  ([`bdf94b1`](https://github.com/jarlor/uv-python-repo-template/commit/bdf94b144fa09c6a94ecb853ad09e2012717c08a))
+
+
 ## v0.21.2 (2025-04-02)
 
 ### Bug Fixes
