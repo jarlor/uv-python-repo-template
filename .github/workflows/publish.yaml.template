@@ -34,6 +34,7 @@ jobs:
           body_path: release_notes.md
           files: dist/*
           token: ${{ secrets.ACTION_GITHUB_TOKEN }}
+          make_latest: true
 
       - name: Publish to PyPI
         run: uv publish
