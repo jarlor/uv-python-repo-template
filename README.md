@@ -138,3 +138,8 @@ uv run poe action toggle --disable publish # Disable publish workflow
 
 Original inspiration and base template
 from [python-repo-template](https://github.com/GiovanniGiacometti/python-repo-template).
+
+## Collaborators
+
+<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -end -->
