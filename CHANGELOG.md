@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v1.1.0 (2025-04-03)
+
+### Features
+
+- Add make_latest option to publish and release workflows
+  ([`f22c271`](https://github.com/jarlor/uv-python-repo-template/commit/f22c2716435c250fb178097a9f9212034c198497))
+
+- Update pre-commit hooks and task sequences for validation
+  ([`3beef69`](https://github.com/jarlor/uv-python-repo-template/commit/3beef69b5c791210512c9cc0a5082308aa4d2fff))
+
+
 ## v1.0.0 (2025-04-03)
 
 ### Chores
