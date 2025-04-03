@@ -3,7 +3,7 @@ name: Release to GitHub
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
 
 jobs:
   release-to-github:
@@ -20,9 +20,6 @@ jobs:
         with:
           python-version-file: ".python-version"
 
-      - name: Build package
-        run: uv build
-
       - name: Extract Release Notes
         id: github_release
         run: |
@@ -32,5 +29,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           body_path: release_notes.md
-          files: dist/*
           token: ${{ secrets.ACTION_GITHUB_TOKEN }}
