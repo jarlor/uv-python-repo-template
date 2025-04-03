@@ -1,7 +1,7 @@
 # CHANGELOG
 
 
-## Unreleased
+## v1.0.0 (2025-04-03)
 
 ### Chores
 
@@ -15,6 +15,11 @@
 
 - Disable workflow lint_test
   ([`a017b2d`](https://github.com/jarlor/uv-python-repo-template/commit/a017b2d65da939edf1a5c47aa7df72a76230ffe4))
+
+### Features
+
+- Modify task sequences in pyproject.toml
+  ([`c73925e`](https://github.com/jarlor/uv-python-repo-template/commit/c73925e36294b947cbd4dd38fe9e97d274e9f8e3))
 
 
 ## v0.24.0 (2025-04-03)
