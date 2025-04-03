@@ -14,5 +14,6 @@ wheels/
 .uv_cache
 
 # This should be removed when the template is actually being used
-uv.lock 
+uv.lock
 
+.pre-commit.log
