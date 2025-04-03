@@ -1,12 +1,17 @@
 # CHANGELOG
 
 
-## Unreleased
+## v0.23.0 (2025-04-03)
 
 ### Build System
 
 - Update initialization script to add changes and commit with project name
   ([`b8b8d92`](https://github.com/jarlor/uv-python-repo-template/commit/b8b8d920c758c0fdfbfc85e6528ee5f90e34cdcc))
+
+### Features
+
+- Implement workflow management and secret validation
+  ([`5109744`](https://github.com/jarlor/uv-python-repo-template/commit/51097442c2fc5dc79bd195331f35f159cc55890d))
 
 
 ## v0.22.2 (2025-04-03)
