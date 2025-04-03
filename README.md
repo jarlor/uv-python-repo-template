@@ -142,4 +142,17 @@ from [python-repo-template](https://github.com/GiovanniGiacometti/python-repo-te
 ## Collaborators
 
 <!-- readme: collaborators,contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/jarlor">
+                    <img src="https://avatars.githubusercontent.com/u/53697817?v=4" width="100;" alt="jarlor"/>
+                    <br />
+                    <sub><b>Jarlor Zhang</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: collaborators,contributors -end -->
