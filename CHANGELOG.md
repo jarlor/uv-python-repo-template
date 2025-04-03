@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## Unreleased
+
+### Continuous Integration
+
+- Disable workflow lint_test
+  ([`a017b2d`](https://github.com/jarlor/uv-python-repo-template/commit/a017b2d65da939edf1a5c47aa7df72a76230ffe4))
+
+
 ## v0.24.0 (2025-04-03)
 
 ### Features
