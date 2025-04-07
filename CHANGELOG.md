@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.3.2 (2025-04-07)
+
+### Bug Fixes
+
+- Adjust ruff format line length to 100 characters
+  ([`a5a88a1`](https://github.com/jarlor/uv-python-repo-template/commit/a5a88a1cfaa0d40c21b7a88f27cd0bb242e380bf))
+
+
 ## v1.3.1 (2025-04-07)
 
 ### Bug Fixes
