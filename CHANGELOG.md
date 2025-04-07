@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.3.1 (2025-04-07)
+
+### Bug Fixes
+
+- Update pre-commit hook entry to use 'poe lint' for code formatting
+  ([`e7444f5`](https://github.com/jarlor/uv-python-repo-template/commit/e7444f5a50bde0603885acb6e095258fba991224))
+
+- Update ruff check command to target src/ directory
+  ([`2f37392`](https://github.com/jarlor/uv-python-repo-template/commit/2f373927e594627af335c188c1d66ae3e64bcc9c))
+
+### Documentation
+
+- **contributor**: Contrib-readme-action has updated readme
+  ([`5b74a4c`](https://github.com/jarlor/uv-python-repo-template/commit/5b74a4c3f092c38b46418c63ada363449ab5efd3))
+
+
 ## v1.3.0 (2025-04-03)
 
 ### Features
