@@ -3,7 +3,7 @@ repos:
     hooks:
       - id: lint
         name: Code Formatting
-        entry: uv run poe validate
+        entry: uv run poe lint
         language: system
         pass_filenames: false
         types: [python]
