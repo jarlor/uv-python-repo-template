@@ -18,7 +18,7 @@ build-backend = "hatchling.build"
 
 [tool.poe.tasks]
 # lint and format tasks
-format = "ruff format --line-length 120"
+format = "ruff format --line-length 100"
 check = "ruff check src/ --fix"
 _lint_mypy = "mypy --ignore-missing-imports --install-types --non-interactive --package src.uv_python_repo_template"
 

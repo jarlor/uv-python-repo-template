@@ -87,7 +87,12 @@ def check_workflow_secrets(workflow_name: str):
 
 
 class ColorFormatter(logging.Formatter):
-    COLORS = {SUCCESS_LEVEL: "\033[92m", logging.WARNING: "\033[93m", logging.ERROR: "\033[91m", "RESET": "\033[0m"}
+    COLORS = {
+        SUCCESS_LEVEL: "\033[92m",
+        logging.WARNING: "\033[93m",
+        logging.ERROR: "\033[91m",
+        "RESET": "\033[0m",
+    }
 
     def format(self, record):
         color = self.COLORS.get(record.levelno, "")
@@ -123,7 +128,12 @@ def discover_workflows():
 
 def validate_workflow(name: str) -> bool:
     """Validate workflow existence"""
-    return any([(WORKFLOW_DIR / f"{name}.yaml").exists(), (WORKFLOW_DIR / f"{name}.yaml.template").exists()])
+    return any(
+        [
+            (WORKFLOW_DIR / f"{name}.yaml").exists(),
+            (WORKFLOW_DIR / f"{name}.yaml.template").exists(),
+        ]
+    )
 
 
 def list_workflows():
@@ -146,9 +156,13 @@ def list_workflows():
 def git_commit(workflow_name: str, action: str):
     """Commit changes to Git"""
     try:
-        subprocess.run(["git", "add", str(WORKFLOW_DIR)], check=True, capture_output=True, text=True)
+        subprocess.run(
+            ["git", "add", str(WORKFLOW_DIR)], check=True, capture_output=True, text=True
+        )
         commit_message = f"ci: {action} workflow {workflow_name}"
-        subprocess.run(["git", "commit", "-m", commit_message], check=True, capture_output=True, text=True)
+        subprocess.run(
+            ["git", "commit", "-m", commit_message], check=True, capture_output=True, text=True
+        )
         logging.getLogger().success("Changes committed successfully")
     except subprocess.CalledProcessError as e:
         logging.error(f"Git operation failed: {e.stderr}")
@@ -161,7 +175,11 @@ def toggle_workflow(action: str, name: str, commit: bool = False):
         logging.error(f"Workflow '{name}' not found! Available: {available}")
         sys.exit(1)
 
-    src = WORKFLOW_DIR / f"{name}.yaml.template" if action == "enable" else WORKFLOW_DIR / f"{name}.yaml"
+    src = (
+        WORKFLOW_DIR / f"{name}.yaml.template"
+        if action == "enable"
+        else WORKFLOW_DIR / f"{name}.yaml"
+    )
     dest = src.with_suffix("" if action == "enable" else ".yaml.template")
 
     if not src.exists():
