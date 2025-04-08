@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v1.3.3 (2025-04-08)
+
+### Bug Fixes
+
+- Add conflict check for mutually exclusive workflows 'release' and 'publish'
+  ([`e0ff4d1`](https://github.com/jarlor/uv-python-repo-template/commit/e0ff4d16a67d7bf17dd5449965ff4a59eac4de00))
+
+- Include 'uv.lock' in semantic release assets
+  ([`8916029`](https://github.com/jarlor/uv-python-repo-template/commit/89160297f6faffcdbba10dc9e55c7253dfe3c06d))
+
+
 ## v1.3.2 (2025-04-07)
 
 ### Bug Fixes
