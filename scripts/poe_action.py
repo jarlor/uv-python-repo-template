@@ -174,27 +174,35 @@ def toggle_workflow(action: str, name: str, commit: bool = False):
         available = list(discover_workflows().keys())
         logging.error(f"Workflow '{name}' not found! Available: {available}")
         sys.exit(1)
-
     src = (
         WORKFLOW_DIR / f"{name}.yaml.template"
         if action == "enable"
         else WORKFLOW_DIR / f"{name}.yaml"
     )
     dest = src.with_suffix("" if action == "enable" else ".yaml.template")
-
     if not src.exists():
         conflict = "enabled" if action == "enable" else "disabled"
         logging.error(f"Workflow '{name}' is already {conflict}!")
         sys.exit(2)
 
-    src.rename(dest)
+    # 添加冲突检查：release 和 publish 不能同时启用
+    if action == "enable":
+        CONFLICT_PAIRS = {"release": "publish", "publish": "release"}
+        if name in CONFLICT_PAIRS:
+            conflict_name = CONFLICT_PAIRS[name]
+            conflict_path = WORKFLOW_DIR / f"{conflict_name}.yaml"
+            if conflict_path.exists():
+                logging.error(
+                    f"Error: Cannot enable both '{name}' and '{conflict_name}' workflows. "
+                    "They are mutually exclusive."
+                )
+                sys.exit(3)
 
+    src.rename(dest)
     if action == "enable":
         check_workflow_secrets(name)
-
     if commit:
         git_commit(name, action)
-
     logging.getLogger().success(f"Successfully {action}d {name} workflow")
 
 
