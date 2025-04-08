@@ -80,6 +80,6 @@ dev = [
 
 
 [semantic_release]
-assets = ["pyproject.toml"]
+assets = ["pyproject.toml","uv.lock"]
 [semantic_release.remote]
 ignore_token_for_push = true
