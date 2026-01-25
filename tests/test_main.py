@@ -1,13 +1,14 @@
+from typing import Union
+
 import pytest
 
 
-def add_numbers(a, b):
+def add_numbers(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
     if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
         raise TypeError("Inputs must be integers or floats")
     return a + b
 
 
-# 测试正常输入
 @pytest.mark.parametrize(
     "a, b, expected",
     [
@@ -17,10 +18,12 @@ def add_numbers(a, b):
         (0, 0, 0),
     ],
 )
-def test_add_numbers(a, b, expected):
+def test_add_numbers(
+    a: Union[int, float], b: Union[int, float], expected: Union[int, float]
+) -> None:
     assert add_numbers(a, b) == expected
 
 
-def test_add_numbers_type_error():
+def test_add_numbers_type_error() -> None:
     with pytest.raises(TypeError):
-        add_numbers("1", 2)  #
+        add_numbers("1", 2)  # type: ignore[arg-type]
