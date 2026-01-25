@@ -4,6 +4,7 @@ set -euo pipefail
 
 MODE="release"
 VERSION="auto"
+USE_SEMANTIC_RELEASE_CHANGELOG=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -101,10 +102,10 @@ if [[ "$VERSION" == "auto" ]]; then
     uv run poe smoke
     echo ""
     
-    NEXT_VERSION=$(uv run semantic-release version --print)
+    NEXT_VERSION=$(uv run semantic-release version --print 2>&1 | tail -1)
     CURRENT_VERSION=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
     
-    if [[ "$NEXT_VERSION" == "$CURRENT_VERSION" ]]; then
+    if [[ -z "$NEXT_VERSION" ]] || [[ "$NEXT_VERSION" == "$CURRENT_VERSION" ]] || [[ "$NEXT_VERSION" == *"isn't in any release groups"* ]]; then
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "⚠️  No new version to release"
@@ -115,6 +116,7 @@ if [[ "$VERSION" == "auto" ]]; then
         echo "Possible reasons:"
         echo "  - No feat/fix commits since last release"
         echo "  - Only docs/style/test commits (don't trigger version bump)"
+        echo "  - Branch 'dev' not configured in semantic-release"
         echo ""
         echo "Options:"
         echo "  1. Manual release:  uv run poe prepare-tag 1.6.0"
@@ -122,6 +124,20 @@ if [[ "$VERSION" == "auto" ]]; then
         echo ""
         exit 1
     fi
+    
+    VERSION="$NEXT_VERSION"
+    USE_SEMANTIC_RELEASE_CHANGELOG=true
+    echo "✅ Next version: $VERSION"
+    echo ""
+    
+else
+    if [[ "$MODE" == "hotfix" ]]; then
+        echo "🚨 Using hotfix version: $VERSION"
+    else
+        echo "📌 Using manual version: $VERSION"
+    fi
+    echo ""
+fi
     
     VERSION="$NEXT_VERSION"
     echo "✅ Next version: $VERSION"
@@ -185,7 +201,11 @@ if [[ "$MODE" == "hotfix" ]]; then
     echo "   ✓ Added v$VERSION (HOTFIX) section"
     echo "   ⚠️  Please edit CHANGELOG.md to describe the fix"
     
-elif [[ "$VERSION" != "auto" ]]; then
+elif [[ "$USE_SEMANTIC_RELEASE_CHANGELOG" == "true" ]]; then
+    uv run semantic-release changelog
+    echo "   ✓ Generated CHANGELOG using semantic-release"
+    
+else
     TEMP_FILE=$(mktemp)
     awk -v version="$VERSION" -v date="$TODAY" '
     /^## Unreleased/ {
@@ -199,10 +219,6 @@ elif [[ "$VERSION" != "auto" ]]; then
     ' CHANGELOG.md > "$TEMP_FILE"
     mv "$TEMP_FILE" CHANGELOG.md
     echo "   ✓ Moved Unreleased to v$VERSION ($TODAY)"
-    
-else
-    uv run semantic-release changelog
-    echo "   ✓ Generated CHANGELOG using semantic-release"
 fi
 
 echo ""
@@ -216,8 +232,13 @@ else
 fi
 
 echo ""
+echo "5. Pushing branch to remote..."
+git push origin "$BRANCH"
+echo "   ✓ Pushed $BRANCH to origin"
+
+echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "✓ $(echo $MODE | tr '[:lower:]' '[:upper:]') branch prepared!"
+echo "✓ $(echo $MODE | tr '[:lower:]' '[:upper:]') branch prepared and pushed!"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "Branch: $BRANCH"
@@ -240,8 +261,7 @@ if [[ "$MODE" == "hotfix" ]]; then
     echo "     git diff HEAD~1 CHANGELOG.md  # Edit if needed"
 fi
 echo ""
-echo "  2. Push and create PR:"
-echo "     git push origin $BRANCH"
+echo "  2. Create PR:"
 if [[ "$MODE" == "hotfix" ]]; then
     echo "     gh pr create --title \"fix: critical issue (v${VERSION})\" --base master"
 else
