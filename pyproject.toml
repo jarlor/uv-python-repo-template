@@ -57,7 +57,11 @@ smoke = { shell = "python -c 'import uv_python_repo_template as p; p.main()'" }
 _tag_changelog = "semantic-release changelog"
 _tag_version = "semantic-release version --no-push"
 _tag_update_toml_version = { shell = "update-toml update --path project.version --value $(semantic-release version --print)" }
-tag = { sequence = ["lint", "test", "smoke", "_tag_changelog", "_tag_update_toml_version", "_tag_version"] }
+
+[tool.poe.tasks.tag]
+shell = "bash scripts/tag.sh ${version}"
+args = [{ name = "version", options = ["--version"], type = "string", default = "auto" }]
+help = "Create version tag (auto: uv run poe tag, manual: uv run poe tag --version X.Y.Z)"
 
 [tool.poe.tasks.init]
 shell = "bash scripts/init.sh ${yes:+ -y}"
