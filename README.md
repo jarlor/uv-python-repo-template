@@ -132,50 +132,36 @@ Follow [Conventional Commits](https://www.conventionalcommits.org):
 
 ### Release Process
 
-**Normal Release (from dev branch):**
+**Fully Automated Release:**
 
 ```bash
-# 1. Prepare release (auto version calculation)
+# 1. Develop features on dev branch
 git checkout dev
-git pull origin dev
-uv run poe prepare-tag
+git commit -m "feat: add new feature"
+git push origin dev
 
-# 2. Push and create PR
-git push origin release/vX.Y.Z
-gh pr create --title "chore: release vX.Y.Z" --base master
+# 2. Create PR to master
+gh pr create --title "feat: add new feature" --base master
 
 # 3. Merge PR
-# → Tag is created automatically by GitHub Actions
-# → Production deployment triggered
-# → GitHub Release created
-# → Changes synced to dev
+# → GitHub Actions automatically:
+#    - Calculates next version using semantic-release
+#    - Updates pyproject.toml and CHANGELOG.md
+#    - Creates commit on master
+#    - Creates and pushes tag
+#    - Triggers production deployment
+#    - Creates GitHub Release
+#    - Syncs changes to dev
 ```
 
-**Manual version (when auto-calculation fails):**
-```bash
-# Specify version manually
-uv run poe prepare-tag 1.6.0
-```
-
-**Hotfix Release (from master branch):**
-```bash
-# 1. Prepare hotfix
-git checkout master
-git pull origin master
-uv run poe prepare-tag --hotfix 1.5.2
-
-# 2. Fix the bug, update CHANGELOG, push and create PR
-git push origin hotfix/v1.5.2
-gh pr create --title "fix: critical issue (v1.5.2)" --base master
-
-# 3. Merge PR → Tag created automatically
-```
+**That's it! No manual version management needed.**
 
 **Key Points:**
-- ✅ All releases go through PR review
-- ✅ Tags are created automatically after PR merge
-- ✅ Version is calculated automatically (semantic-release)
-- ✅ Manual version available when needed
+- ✅ Completely automated - just merge PRs
+- ✅ Version calculated from commit messages
+- ✅ Tags created on master automatically
+- ✅ All changes go through PR review
+- ✅ No manual scripts to run
 
 ## 🛠️ Available Commands
 
@@ -186,14 +172,11 @@ uv run poe lint            # Run linters (Ruff + mypy)
 uv run poe test            # Run tests with pytest
 uv run poe smoke           # Run smoke tests
 
-# Release
-uv run poe prepare-tag                    # Prepare release (auto version)
-uv run poe prepare-tag 1.6.0              # Prepare release (manual version)
-uv run poe prepare-tag --hotfix 1.5.2     # Prepare hotfix
-
 # Setup
 uv run poe init -y         # Initialize project (first-time setup)
 ```
+
+**Note:** Release management is fully automated via GitHub Actions. No manual commands needed!
 
 ## 📋 Requirements
 
