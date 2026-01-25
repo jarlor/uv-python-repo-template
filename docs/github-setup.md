@@ -6,29 +6,44 @@ This guide covers the GitHub-specific configuration needed after initializing yo
 
 After running `uv run poe init -y`, you need to configure your GitHub repository settings to enable:
 
-- Branch protection rules
+- Branch protection rules (master only)
 - Required status checks
 - GitHub Actions permissions
 - Secrets for deployment (if needed)
 
+## Branch Protection Strategy
+
+This template uses a **hybrid protection approach**:
+
+### Master Branch: Hard Protection (GitHub)
+- ✅ **Enforced on GitHub** - Cannot be bypassed
+- ✅ Requires PR before merge
+- ✅ Requires status checks to pass
+- ✅ Prevents direct pushes from anyone
+
+### Dev Branch: Soft Protection (Local)
+- ✅ **Enforced locally** via pre-push hook
+- ✅ Blocks direct push from developers
+- ✅ Allows automated sync from master
+- ❌ **No GitHub protection** - Keeps workflow simple
+
+**Why this approach?**
+
+1. **Master protection is critical** - Production code must be reviewed
+2. **Dev protection is flexible** - Allows automated master → dev sync without complex GitHub App setup
+3. **Developer experience** - Local hook provides immediate feedback
+4. **Emergency bypass** - Developers can use `--no-verify` if needed
+
 ## 1. Branch Protection Rules
 
-Protect your `dev` and `master` branches to enforce the PR workflow.
+### For `master` Branch (Required)
 
-### Steps
-
-1. Go to your repository on GitHub
-2. Navigate to **Settings** → **Branches**
-3. Click **Add branch protection rule**
-
-### For `dev` Branch
-
-**Branch name pattern:** `dev`
+**Branch name pattern:** `master`
 
 **Settings to enable:**
 
 - ✅ **Require a pull request before merging**
-  - ✅ Require approvals: 1 (optional, for team projects)
+  - ✅ Require approvals: 1 (recommended for team projects)
   - ✅ Dismiss stale pull request approvals when new commits are pushed
   - ✅ Require review from Code Owners (optional)
 
@@ -47,16 +62,25 @@ Protect your `dev` and `master` branches to enforce the PR workflow.
 
 - ❌ **Allow deletions** (keep disabled)
 
-### For `master` Branch
-
-**Branch name pattern:** `master`
-
-**Settings:** Same as `dev` branch
-
 **Additional settings:**
 
 - ✅ **Restrict who can push to matching branches**
   - Add specific users/teams who can push (optional)
+
+### For `dev` Branch (Not Required)
+
+**⚠️ Do NOT set up branch protection for `dev` on GitHub.**
+
+The `dev` branch is protected locally via pre-push hook:
+- Installed automatically by `uv run poe init -y`
+- Blocks direct push to `dev` branch
+- Requires feature branch → PR workflow
+- Allows automated sync from master
+
+**If you accidentally set up dev protection:**
+1. Go to **Settings** → **Branches**
+2. Find the `dev` branch protection rule
+3. Click **Delete** to remove it
 
 ## 2. GitHub Actions Permissions
 

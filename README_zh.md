@@ -107,9 +107,15 @@ feature/* → dev → master
            dev 环境  生产环境
 ```
 
-- `dev` - 集成分支（自动部署到 dev 环境）
-- `master` - 生产分支（打 tag 时部署）
-- 禁止直接推送到 `dev`/`master`（仅允许 PR）
+**分支保护：**
+- `master` - **硬保护**（GitHub）：要求 PR + 状态检查通过
+- `dev` - **软保护**（本地 pre-push hook）：阻止直接推送，允许从 master 自动同步
+- 禁止直接推送，强制 PR 工作流
+
+**为什么采用这种方式？**
+- Master 保护对生产代码质量至关重要
+- Dev 保护更灵活，允许 master → dev 自动同步
+- 无需复杂的 GitHub App 配置即可实现分支同步
 
 ### 提交规范
 

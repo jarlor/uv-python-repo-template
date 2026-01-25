@@ -100,10 +100,13 @@ After running `init`, you'll see a checklist like this:
   ☐ Implement deploy steps in .github/workflows/prod_deploy.yaml
 
 🔒 GITHUB BRANCH PROTECTION (Settings → Branches)
-  ☐ Protect 'dev' and 'master' branches
+  ☐ Protect 'master' branch (REQUIRED)
   ☐ Require pull request reviews before merge
   ☐ Require status checks to pass: "PR Gate"
-  ☐ Restrict direct pushes to dev/master
+  ☐ Restrict direct pushes to master
+  
+  ⚠️  Do NOT protect 'dev' branch on GitHub
+  ℹ️  Dev is protected locally via pre-push hook
 
 🔑 GITHUB SECRETS (Settings → Secrets and variables → Actions)
   ⚠️  Currently no deployment workflows configured
