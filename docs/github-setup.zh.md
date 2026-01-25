@@ -76,24 +76,39 @@
 
 ## 3. 必需的 Secrets（可选）
 
-如果你要部署到 AWS ECS 或其他云提供商，请配置这些 secrets。
+如果你要部署到云提供商或远程服务器，请配置这些 secrets。
 
 ### 步骤
 
 1. 访问 **Settings** → **Secrets and variables** → **Actions**
 2. 点击 **New repository secret**
 
-### AWS ECS 部署 Secrets
+### 常见部署 Secrets
 
 | Secret 名称 | 说明 | 示例 |
 |-------------|------|------|
-| `AWS_REGION` | AWS 区域 | `us-east-1` |
-| `AWS_ROLE_TO_ASSUME` | OIDC role ARN | `arn:aws:iam::123456789012:role/GitHubActionsRole` |
-| `ECR_REGISTRY` | ECR registry URL | `123456789012.dkr.ecr.us-east-1.amazonaws.com` |
-| `ECR_REPOSITORY` | ECR repository 名称 | `my-app` |
-| `ECS_CLUSTER` | ECS cluster 名称 | `my-cluster` |
-| `ECS_SERVICE_WEB` | ECS web service 名称 | `my-app-web` |
-| `ECS_SERVICE_WORKER` | ECS worker service 名称 | `my-app-worker` |
+| `DOCKER_REGISTRY_URL` | Docker registry URL | `docker.io`、`ghcr.io` |
+| `DOCKER_USERNAME` | Docker registry 用户名 | `myusername` |
+| `DOCKER_PASSWORD` | Docker registry 密码/token | `ghp_xxxxx` |
+| `SSH_PRIVATE_KEY` | 用于部署的 SSH 私钥 | `-----BEGIN RSA PRIVATE KEY-----...` |
+| `DEPLOY_HOST` | 部署服务器主机名 | `deploy.example.com` |
+| `DEPLOY_USER` | 部署用的 SSH 用户 | `deploy` |
+| `DEPLOY_PATH` | 部署目录路径 | `/var/www/myapp` |
+
+### 云提供商 Secrets
+
+**AWS:**
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_REGION`
+
+**Google Cloud:**
+- `GCP_PROJECT_ID`
+- `GCP_SERVICE_ACCOUNT_KEY`
+
+**Azure:**
+- `AZURE_CREDENTIALS`
+- `AZURE_SUBSCRIPTION_ID`
 
 ### 其他常见 Secrets
 

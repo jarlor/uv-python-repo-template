@@ -106,14 +106,13 @@ After running `init`, you'll see a checklist like this:
   ☐ Restrict direct pushes to dev/master
 
 🔑 GITHUB SECRETS (Settings → Secrets and variables → Actions)
-  Required for ECS deployment:
-  ☐ AWS_REGION
-  ☐ AWS_ROLE_TO_ASSUME (OIDC role ARN)
-  ☐ ECR_REGISTRY
-  ☐ ECR_REPOSITORY
-  ☐ ECS_CLUSTER
-  ☐ ECS_SERVICE_WEB
-  ☐ ECS_SERVICE_WORKER
+  Configure deployment secrets as needed:
+  ☐ DOCKER_REGISTRY_URL (e.g., Docker Hub, GitHub Container Registry)
+  ☐ DOCKER_USERNAME
+  ☐ DOCKER_PASSWORD
+  ☐ SSH_PRIVATE_KEY (for SSH-based deployments)
+  ☐ DEPLOY_HOST (deployment server hostname)
+  ☐ Other cloud provider credentials as required
 ```
 
 See [GitHub Setup Guide](github-setup.md) for detailed instructions.

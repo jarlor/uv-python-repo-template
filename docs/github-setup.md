@@ -76,24 +76,39 @@ Ensure GitHub Actions has the necessary permissions.
 
 ## 3. Required Secrets (Optional)
 
-If you're deploying to AWS ECS or other cloud providers, configure these secrets.
+If you're deploying to cloud providers or remote servers, configure these secrets.
 
 ### Steps
 
 1. Go to **Settings** → **Secrets and variables** → **Actions**
 2. Click **New repository secret**
 
-### AWS ECS Deployment Secrets
+### Common Deployment Secrets
 
 | Secret Name | Description | Example |
 |-------------|-------------|---------|
-| `AWS_REGION` | AWS region | `us-east-1` |
-| `AWS_ROLE_TO_ASSUME` | OIDC role ARN | `arn:aws:iam::123456789012:role/GitHubActionsRole` |
-| `ECR_REGISTRY` | ECR registry URL | `123456789012.dkr.ecr.us-east-1.amazonaws.com` |
-| `ECR_REPOSITORY` | ECR repository name | `my-app` |
-| `ECS_CLUSTER` | ECS cluster name | `my-cluster` |
-| `ECS_SERVICE_WEB` | ECS web service name | `my-app-web` |
-| `ECS_SERVICE_WORKER` | ECS worker service name | `my-app-worker` |
+| `DOCKER_REGISTRY_URL` | Docker registry URL | `docker.io`, `ghcr.io` |
+| `DOCKER_USERNAME` | Docker registry username | `myusername` |
+| `DOCKER_PASSWORD` | Docker registry password/token | `ghp_xxxxx` |
+| `SSH_PRIVATE_KEY` | SSH private key for deployment | `-----BEGIN RSA PRIVATE KEY-----...` |
+| `DEPLOY_HOST` | Deployment server hostname | `deploy.example.com` |
+| `DEPLOY_USER` | SSH user for deployment | `deploy` |
+| `DEPLOY_PATH` | Deployment directory path | `/var/www/myapp` |
+
+### Cloud Provider Secrets
+
+**AWS:**
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_REGION`
+
+**Google Cloud:**
+- `GCP_PROJECT_ID`
+- `GCP_SERVICE_ACCOUNT_KEY`
+
+**Azure:**
+- `AZURE_CREDENTIALS`
+- `AZURE_SUBSCRIPTION_ID`
 
 ### Other Common Secrets
 

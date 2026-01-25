@@ -106,14 +106,13 @@ uv run poe init -y
   ☐ 限制直接推送到 dev/master
 
 🔑 GITHUB SECRETS (Settings → Secrets and variables → Actions)
-  ECS 部署所需：
-  ☐ AWS_REGION
-  ☐ AWS_ROLE_TO_ASSUME (OIDC role ARN)
-  ☐ ECR_REGISTRY
-  ☐ ECR_REPOSITORY
-  ☐ ECS_CLUSTER
-  ☐ ECS_SERVICE_WEB
-  ☐ ECS_SERVICE_WORKER
+  根据需要配置部署 secrets：
+  ☐ DOCKER_REGISTRY_URL（例如 Docker Hub、GitHub Container Registry）
+  ☐ DOCKER_USERNAME
+  ☐ DOCKER_PASSWORD
+  ☐ SSH_PRIVATE_KEY（用于基于 SSH 的部署）
+  ☐ DEPLOY_HOST（部署服务器主机名）
+  ☐ 其他所需的云提供商凭据
 ```
 
 详细说明请参见 [GitHub 设置指南](github-setup.zh.md)。
