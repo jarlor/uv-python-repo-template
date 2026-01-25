@@ -73,10 +73,10 @@ git push origin feature/my-feature
 
 | 文档 | 说明 |
 |------|------|
-| [快速开始](docs/getting-started.md) | 详细的设置和初始化指南 |
-| [GitHub 设置](docs/github-setup.md) | 配置分支保护、Secrets 和 Actions |
-| [开发流程](docs/development-workflow.md) | 标准开发流程和最佳实践 |
-| [功能特性](docs/features.md) | 深入的功能说明 |
+| [快速开始](docs/getting-started.zh.md) | 详细的设置和初始化指南 |
+| [GitHub 设置](docs/github-setup.zh.md) | 配置分支保护、Secrets 和 Actions |
+| [开发流程](docs/development-workflow.zh.md) | 标准开发流程和最佳实践 |
+| [功能特性](docs/features.zh.md) | 深入的功能说明 |
 
 ## 🎯 核心功能
 
