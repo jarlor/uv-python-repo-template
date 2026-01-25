@@ -80,6 +80,40 @@ uv run mypy --ignore-missing-imports --install-types --non-interactive --package
 - **Indentation**: 4 spaces (Python standard)
 - **Quotes**: Double quotes preferred (Ruff default)
 
+### Linting Rules (Ruff)
+
+Enabled rule sets:
+- **E/W**: pycodestyle errors and warnings
+- **F**: pyflakes
+- **I**: isort (import sorting)
+- **N**: pep8-naming
+- **UP**: pyupgrade (modern Python syntax)
+- **B**: flake8-bugbear (common bugs)
+- **C4**: flake8-comprehensions
+- **SIM**: flake8-simplify
+- **RET**: flake8-return
+- **ARG**: flake8-unused-arguments
+- **PTH**: flake8-use-pathlib
+- **ERA**: eradicate (commented-out code)
+- **PL**: pylint
+- **PERF**: perflint (performance)
+
+Ignored rules:
+- **E501**: line-too-long (handled by formatter)
+- **PLR0913**: too-many-arguments
+- **PLR2004**: magic-value-comparison
+
+### Type Checking (mypy)
+
+**Strict mode enabled** with comprehensive checks:
+- All functions must have type annotations
+- No untyped definitions allowed
+- No implicit `Any` types
+- Strict equality and concatenation checks
+- Warns on unused configs, redundant casts, unreachable code
+
+**Required**: Add type hints to all function signatures, including return types.
+
 ### Imports
 
 Follow standard Python import ordering:
@@ -100,13 +134,15 @@ from my_module import helper  # local
 
 ### Type Annotations
 
-- Use type hints for function signatures
+- Use type hints for all function signatures (required by mypy strict mode)
 - Use `Optional[T]` for nullable types
-- Use `typing` module types: `Set`, `Optional`, `List`, `Dict`
-- mypy runs with `--ignore-missing-imports`
+- Use `Union[T1, T2]` for multiple types
+- Use `typing` module types: `Set`, `Optional`, `List`, `Dict`, `Union`
+- All functions must have return type annotations (including `-> None`)
 
 ```python
-from typing import Set, Optional
+from typing import Optional, Set, Union
+from pathlib import Path
 
 def get_git_remote_url() -> Optional[str]:
     """Get Git repository URL automatically"""
@@ -114,6 +150,13 @@ def get_git_remote_url() -> Optional[str]:
 
 def parse_secrets_from_yaml(yaml_path: Path) -> Set[str]:
     """Parse used secrets from YAML file"""
+    ...
+
+def add_numbers(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
+    return a + b
+
+def main() -> None:
+    print("Hello, World!")
     ...
 ```
 
