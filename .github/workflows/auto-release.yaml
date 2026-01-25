@@ -56,8 +56,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          uv run semantic-release version
-          uv run semantic-release changelog
+          echo "Running semantic-release version..."
+          uv run semantic-release version --no-commit --no-tag --no-push
+          
+          echo "Running semantic-release changelog..."
+          uv run semantic-release changelog --unreleased
       
       - name: Get new version
         if: steps.check.outputs.needed == 'true'
@@ -70,7 +73,13 @@ jobs:
       - name: Commit and push changes
         if: steps.check.outputs.needed == 'true'
         run: |
-          git add pyproject.toml CHANGELOG.md uv.lock
+          git add pyproject.toml CHANGELOG.md uv.lock || true
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
           git commit -m "chore: release v${{ steps.version.outputs.version }}"
           git push origin master
       
