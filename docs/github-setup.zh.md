@@ -323,4 +323,4 @@ updates:
 
 - [学习开发流程](development-workflow.zh.md)
 - [探索功能特性](features.zh.md)
-- [自定义 Workflows](.github/workflows/)
+- [自定义 Workflows](../.github/workflows/)

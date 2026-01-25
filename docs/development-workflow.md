@@ -508,4 +508,4 @@ graph TD
 
 - [Explore Features](features.md)
 - [GitHub Setup Guide](github-setup.md)
-- [Customize Workflows](.github/workflows/)
+- [Customize Workflows](../.github/workflows/)

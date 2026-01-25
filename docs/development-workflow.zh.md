@@ -478,4 +478,4 @@ git checkout feature/accidental-commit
 
 - [探索功能特性](features.zh.md)
 - [GitHub 设置指南](github-setup.zh.md)
-- [自定义 Workflows](.github/workflows/)
+- [自定义 Workflows](../.github/workflows/)
