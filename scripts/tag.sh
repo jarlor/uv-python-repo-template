@@ -38,7 +38,7 @@ if [[ "$VERSION" == "auto" ]]; then
     
     echo ""
     echo "Committing changes..."
-    git add pyproject.toml CHANGELOG.md
+    git add pyproject.toml CHANGELOG.md uv.lock
     git commit -m "chore: release v$NEXT_VERSION"
     
     echo ""
@@ -103,7 +103,7 @@ else
     
     echo ""
     echo "4. Committing changes..."
-    git add pyproject.toml CHANGELOG.md
+    git add pyproject.toml CHANGELOG.md uv.lock
     git commit -m "chore: release v$VERSION" || echo "   (no changes to commit)"
     
     echo ""
