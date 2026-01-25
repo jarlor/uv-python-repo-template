@@ -1,6 +1,31 @@
 # CHANGELOG
 
 
+## Unreleased
+
+### Features
+
+- **Add pre-push hook to block direct push to dev branch** ([#11](https://github.com/jarlor/uv-python-repo-template/pull/11), [`9b32c32`](https://github.com/jarlor/uv-python-repo-template/commit/9b32c3277ece0f556f346cb4a4ebc27226823e59))
+  - Add `scripts/pre-push.sh` hook template
+  - Automatically installed by `uv run poe init -y`
+  - Blocks direct push to dev branch, requires PR workflow
+  - Allows bypass with `--no-verify` for emergencies
+  - Implements hybrid branch protection strategy (master: GitHub hard protection, dev: local soft protection)
+
+### Documentation
+
+- **Restructure documentation with comprehensive guides** ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10), [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
+  - Complete documentation rewrite with bilingual support (English + Chinese)
+  - Add detailed guides:
+    - `docs/getting-started.md` - Setup and initialization guide
+    - `docs/github-setup.md` - GitHub configuration guide
+    - `docs/development-workflow.md` - Development process guide
+    - `docs/features.md` - Feature explanations
+  - Remove AWS ECS specific references, use generic deployment examples
+  - Explain hybrid branch protection strategy (master hard, dev soft)
+  - Update branch protection documentation to reflect local pre-push hook approach
+
+
 ## v1.4.0 (2026-01-25)
 
 ### Features
