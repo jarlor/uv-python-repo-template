@@ -132,36 +132,42 @@ Follow [Conventional Commits](https://www.conventionalcommits.org):
 
 ### Release Process
 
-**Fully Automated Release:**
-
 ```bash
-# 1. Develop features on dev branch
-git checkout dev
-git commit -m "feat: add new feature"
-git push origin dev
+# 1. Create release branch from master
+git checkout master
+git pull origin master
+git checkout -b release/v1.7.0
 
-# 2. Create PR to master
-gh pr create --title "feat: add new feature" --base master
+# 2. Run tag command to prepare release
+uv run poe tag
+# Or specify version manually:
+# uv run poe tag --version 1.7.0
 
-# 3. Merge PR
+# This will:
+# - Calculate next version (if auto)
+# - Update pyproject.toml
+# - Update CHANGELOG.md
+# - Create commit
+
+# 3. Push branch and create PR
+git push origin release/v1.7.0
+gh pr create --title "chore: release v1.7.0" --base master
+
+# 4. Merge PR
 # → GitHub Actions automatically:
-#    - Calculates next version using semantic-release
-#    - Updates pyproject.toml and CHANGELOG.md
-#    - Creates commit on master
-#    - Creates and pushes tag
+#    - Reads version from pyproject.toml
+#    - Creates tag on master
 #    - Triggers production deployment
 #    - Creates GitHub Release
 #    - Syncs changes to dev
 ```
 
-**That's it! No manual version management needed.**
-
 **Key Points:**
-- ✅ Completely automated - just merge PRs
-- ✅ Version calculated from commit messages
-- ✅ Tags created on master automatically
+- ✅ Manual control - you decide when to release
+- ✅ Version calculated automatically (semantic-release)
+- ✅ Tags created on master after PR merge
 - ✅ All changes go through PR review
-- ✅ No manual scripts to run
+- ✅ Can review and adjust CHANGELOG before release
 
 ## 🛠️ Available Commands
 
@@ -172,11 +178,13 @@ uv run poe lint            # Run linters (Ruff + mypy)
 uv run poe test            # Run tests with pytest
 uv run poe smoke           # Run smoke tests
 
+# Release
+uv run poe tag             # Prepare release (auto version)
+uv run poe tag --version 1.7.0  # Prepare release (manual version)
+
 # Setup
 uv run poe init -y         # Initialize project (first-time setup)
 ```
-
-**Note:** Release management is fully automated via GitHub Actions. No manual commands needed!
 
 ## 📋 Requirements
 
