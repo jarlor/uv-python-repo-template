@@ -8,9 +8,13 @@ on:
 jobs:
   release-to-github:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -31,3 +35,12 @@ jobs:
           body_path: release_notes.md
           token: ${{ secrets.GITHUB_TOKEN }}
           make_latest: true
+
+      - name: Sync master to dev
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin dev
+          git checkout dev
+          git merge origin/master --no-edit
+          git push origin dev
