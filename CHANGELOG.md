@@ -4,29 +4,56 @@
 ## Unreleased
 
 
-## v1.5.0 (2026-01-25)
+## v1.5.1 (2026-01-25)
 
-### Features
+### Chores
 
-- **Add pre-push hook to block direct push to dev branch** ([#11](https://github.com/jarlor/uv-python-repo-template/pull/11), [`9b32c32`](https://github.com/jarlor/uv-python-repo-template/commit/9b32c3277ece0f556f346cb4a4ebc27226823e59))
-  - Add `scripts/pre-push.sh` hook template
-  - Automatically installed by `uv run poe init -y`
-  - Blocks direct push to dev branch, requires PR workflow
-  - Allows bypass with `--no-verify` for emergencies
-  - Implements hybrid branch protection strategy (master: GitHub hard protection, dev: local soft protection)
+- Release v1.5.0 ([#14](https://github.com/jarlor/uv-python-repo-template/pull/14),
+  [`3c8b3d7`](https://github.com/jarlor/uv-python-repo-template/commit/3c8b3d7d0996f7cf6458bc9ce947f843b0704e0e))
+
+1.5.0
 
 ### Documentation
 
-- **Restructure documentation with comprehensive guides** ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10), [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
-  - Complete documentation rewrite with bilingual support (English + Chinese)
-  - Add detailed guides:
-    - `docs/getting-started.md` - Setup and initialization guide
-    - `docs/github-setup.md` - GitHub configuration guide
-    - `docs/development-workflow.md` - Development process guide
-    - `docs/features.md` - Feature explanations
-  - Remove AWS ECS specific references, use generic deployment examples
-  - Explain hybrid branch protection strategy (master hard, dev soft)
-  - Update branch protection documentation to reflect local pre-push hook approach
+- Manually update CHANGELOG for PR #10 and #11
+  ([#12](https://github.com/jarlor/uv-python-repo-template/pull/12),
+  [`85b2cef`](https://github.com/jarlor/uv-python-repo-template/commit/85b2cefe829ba30d823a4c8cccf9ccdcc8c078a5))
+
+Add missing changelog entries for: - feat: pre-push hook for dev branch protection (#11) - docs:
+  comprehensive documentation restructure (#10)
+
+These PRs were merged with non-conventional commit titles, so semantic-release didn't pick them up
+  automatically.
+
+### Refactoring
+
+- Enhance ruff and mypy configurations (#15)
+  ([#16](https://github.com/jarlor/uv-python-repo-template/pull/16),
+  [`8a6c621`](https://github.com/jarlor/uv-python-repo-template/commit/8a6c6211407215b7ef1e3409f497fd2d95ee64a2))
+
+- Remove unused [project.scripts] section - Add comprehensive ruff lint rules (E, W, F, I, N, UP, B,
+  C4, SIM, RET, ARG, PTH, ERA, PL, PERF) - Enable mypy strict mode with full type checking - Add
+  type annotations to all functions (src and tests) - Update AGENTS.md with detailed linting and
+  type checking guidelines
+
+- Merge tag and tag-manual into unified command
+  ([#13](https://github.com/jarlor/uv-python-repo-template/pull/13),
+  [`d3dbfce`](https://github.com/jarlor/uv-python-repo-template/commit/d3dbfce863d9875e8f5407d335f2e3f246e5c7c1))
+
+* feat: add manual version tagging support
+
+- Add scripts/manual_tag.sh for manual version creation - Add 'uv run poe tag-manual --version
+  X.Y.Z' command - Automatically updates pyproject.toml and CHANGELOG.md - Creates git tag with
+  specified version - Update README with manual tagging instructions
+
+Use cases: - When semantic-release refuses to create new version - When only documentation changes
+  were made - When specific version number is needed
+
+* refactor: merge tag and tag-manual into unified command
+
+- Replace separate tag/tag-manual with single 'tag' command - Auto mode: uv run poe tag (default,
+  uses semantic-release) - Manual mode: uv run poe tag --version X.Y.Z - Simplifies user experience
+  with single command - Includes quality checks in both modes
 
 
 ## v1.4.0 (2026-01-25)
