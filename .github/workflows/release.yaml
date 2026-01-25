@@ -1,4 +1,10 @@
-name: Release to GitHub
+# DEPRECATED: This workflow is no longer triggered automatically.
+# GitHub Release creation is now handled by release-on-pr.yaml
+# to avoid the limitation where GITHUB_TOKEN cannot trigger other workflows.
+#
+# This file is kept for reference and can be removed in the future.
+
+name: Release to GitHub (DEPRECATED)
 
 on:
   push:
