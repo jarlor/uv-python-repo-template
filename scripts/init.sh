@@ -29,7 +29,6 @@ fi
 if [[ "$force_run" != "true" ]]; then
     cat <<'EOF'
 This init will:
-- Delete .venv if it exists
 - Rename branch main -> master (if present)
 - Create dev branch (if missing)
 - Create an initialization commit
@@ -49,12 +48,6 @@ elif [[ -d "$src_old" ]]; then
     mv "$src_old" "$src_new"
 else
     echo "Warning: '$src_old' directory not found, skipping renaming" >&2
-fi
-
-if [[ -d ".venv" ]]; then
-    rm -rf ".venv"
-else
-    echo "Warning: '.venv' directory not found, skipping deletion" >&2
 fi
 
 if git rev-parse --git-dir > /dev/null 2>&1; then
