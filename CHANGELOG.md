@@ -3,6 +3,9 @@
 
 ## Unreleased
 
+
+## v1.5.0 (2026-01-25)
+
 ### Features
 
 - **Add pre-push hook to block direct push to dev branch** ([#11](https://github.com/jarlor/uv-python-repo-template/pull/11), [`9b32c32`](https://github.com/jarlor/uv-python-repo-template/commit/9b32c3277ece0f556f346cb4a4ebc27226823e59))
