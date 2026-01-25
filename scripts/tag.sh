@@ -34,15 +34,27 @@ if [[ "$VERSION" == "auto" ]]; then
     fi
     
     update-toml update --path project.version --value "$NEXT_VERSION"
-    semantic-release version --no-push
+    semantic-release version --no-push --no-tag --no-commit
+    
+    echo ""
+    echo "Committing changes..."
+    git add pyproject.toml CHANGELOG.md
+    git commit -m "chore: release v$NEXT_VERSION"
     
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "✓ Release v$NEXT_VERSION created successfully!"
+    echo "✓ Release v$NEXT_VERSION prepared!"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     echo "Next steps:"
-    echo "  git push origin master --tags"
+    echo "  1. Review the changes:"
+    echo "     git show HEAD"
+    echo ""
+    echo "  2. Push branch and create PR:"
+    echo "     git push origin release/v$NEXT_VERSION"
+    echo "     gh pr create --title \"chore: release v$NEXT_VERSION\" --base master"
+    echo ""
+    echo "  3. After PR is merged, tag v$NEXT_VERSION will be created automatically"
     echo ""
 else
     if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -91,24 +103,22 @@ else
     
     echo ""
     echo "4. Committing changes..."
-    git add pyproject.toml CHANGELOG.md uv.lock
-    git commit -m "$VERSION" || echo "   (no changes to commit)"
-    
-    echo ""
-    echo "5. Creating git tag..."
-    git tag -a "$TAG" -m "$VERSION"
-    echo "   ✓ Created tag $TAG"
+    git add pyproject.toml CHANGELOG.md
+    git commit -m "chore: release v$VERSION" || echo "   (no changes to commit)"
     
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "✓ Release $TAG created successfully!"
+    echo "✓ Release v$VERSION prepared!"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     echo "Next steps:"
     echo "  1. Review the changes:"
-    echo "     git show $TAG"
+    echo "     git show HEAD"
     echo ""
-    echo "  2. Push to remote:"
-    echo "     git push origin master --tags"
+    echo "  2. Push branch and create PR:"
+    echo "     git push origin release/v$VERSION"
+    echo "     gh pr create --title \"chore: release v$VERSION\" --base master"
+    echo ""
+    echo "  3. After PR is merged, tag v$VERSION will be created automatically"
     echo ""
 fi

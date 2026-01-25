@@ -284,32 +284,40 @@ Workflows live in `.github/workflows` and are enabled by default.
 
 ## Release Process
 
-**Fully Automated via GitHub Actions:**
-
 ```bash
-# 1. Develop on dev branch
-git checkout dev
-git commit -m "feat: add new feature"
-git push origin dev
+# 1. Create release branch from master
+git checkout master
+git pull origin master
+git checkout -b release/v1.7.0
 
-# 2. Create PR to master
-gh pr create --title "feat: add new feature" --base master
+# 2. Run tag command to prepare release
+uv run poe tag
+# Or specify version manually:
+# uv run poe tag --version 1.7.0
 
-# 3. Merge PR
+# This will:
+# - Calculate next version (if auto)
+# - Update pyproject.toml
+# - Update CHANGELOG.md
+# - Create commit
+
+# 3. Push branch and create PR
+git push origin release/v1.7.0
+gh pr create --title "chore: release v1.7.0" --base master
+
+# 4. Merge PR
 # → GitHub Actions automatically:
-#    - Runs semantic-release to calculate version
-#    - Updates pyproject.toml and CHANGELOG.md
-#    - Creates commit on master
-#    - Creates and pushes tag
+#    - Reads version from pyproject.toml
+#    - Creates tag on master
 #    - Triggers production deployment
 ```
 
 **Key Points:**
-- Completely automated - no manual version management
-- Version calculated from conventional commits
-- Tags created on master automatically (via `auto-release.yaml`)
+- Manual control - you decide when to release
+- Version calculated from conventional commits (semantic-release)
+- Tags created on master after PR merge (via `release-on-pr.yaml`)
 - All changes go through PR review
-- semantic-release runs in CI, not locally
+- Can review and adjust CHANGELOG before release
 
 ## Key Files to Know
 
