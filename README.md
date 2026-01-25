@@ -132,7 +132,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org):
 
 ### Release Process
 
-**Automatic versioning (recommended):**
+**Automatic versioning (default):**
 ```bash
 # On master branch
 uv run poe tag
@@ -152,7 +152,7 @@ This automatically:
 **Manual versioning (when needed):**
 ```bash
 # Specify version manually
-uv run poe tag-manual --version 1.5.0
+uv run poe tag --version 1.5.0
 
 # Push tags
 git push origin master --tags
@@ -160,8 +160,8 @@ git push origin master --tags
 
 Use manual versioning when:
 - semantic-release refuses to create a new version
-- You need a specific version number
 - Only documentation changes were made
+- Specific version number needed
 
 ## 🛠️ Available Commands
 
