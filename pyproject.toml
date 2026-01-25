@@ -177,5 +177,13 @@ args = [{ name = "yes", options = ["-y", "--yes"], type = "boolean" }]
 [semantic_release]
 assets = ["pyproject.toml", "uv.lock"]
 
+[semantic_release.branches.main]
+match = "master"
+prerelease = false
+
+[semantic_release.branches.dev]
+match = "dev"
+prerelease = false
+
 [semantic_release.remote]
 ignore_token_for_push = true
