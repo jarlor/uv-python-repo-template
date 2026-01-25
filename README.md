@@ -168,6 +168,7 @@ gh pr create --title "chore: release v1.7.0" --base master
 - ✅ Tags created on master after PR merge
 - ✅ All changes go through PR review
 - ✅ Can review and adjust CHANGELOG before release
+- ⚠️ Only keep one active release branch at a time (avoid version conflicts)
 
 ## 🛠️ Available Commands
 

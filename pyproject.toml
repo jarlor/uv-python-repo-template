@@ -145,5 +145,9 @@ prerelease = false
 match = "dev"
 prerelease = false
 
+[semantic_release.branches.release]
+match = "release/.+"
+prerelease = false
+
 [semantic_release.remote]
 ignore_token_for_push = true
