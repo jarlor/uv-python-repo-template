@@ -108,14 +108,12 @@ cat <<'EOF'
   ☐ Restrict direct pushes to dev/master
 
 🔑 GITHUB SECRETS (Settings → Secrets and variables → Actions)
-  Required for ECS deployment:
-  ☐ AWS_REGION
-  ☐ AWS_ROLE_TO_ASSUME (OIDC role ARN)
-  ☐ ECR_REGISTRY
-  ☐ ECR_REPOSITORY
-  ☐ ECS_CLUSTER
-  ☐ ECS_SERVICE_WEB
-  ☐ ECS_SERVICE_WORKER
+  ⚠️  Currently no deployment workflows configured
+  ☐ Configure secrets when you implement deployment in:
+     - .github/workflows/dev_deploy.yaml
+     - .github/workflows/prod_deploy.yaml
+  
+  See docs/github-setup.md for common deployment secret examples
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
