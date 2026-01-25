@@ -106,13 +106,12 @@ After running `init`, you'll see a checklist like this:
   ☐ Restrict direct pushes to dev/master
 
 🔑 GITHUB SECRETS (Settings → Secrets and variables → Actions)
-  Configure deployment secrets as needed:
-  ☐ DOCKER_REGISTRY_URL (e.g., Docker Hub, GitHub Container Registry)
-  ☐ DOCKER_USERNAME
-  ☐ DOCKER_PASSWORD
-  ☐ SSH_PRIVATE_KEY (for SSH-based deployments)
-  ☐ DEPLOY_HOST (deployment server hostname)
-  ☐ Other cloud provider credentials as required
+  ⚠️  Currently no deployment workflows configured
+  ☐ Configure secrets when you implement deployment in:
+     - .github/workflows/dev_deploy.yaml
+     - .github/workflows/prod_deploy.yaml
+  
+  See docs/github-setup.md for common deployment secret examples
 ```
 
 See [GitHub Setup Guide](github-setup.md) for detailed instructions.

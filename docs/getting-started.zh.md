@@ -106,13 +106,12 @@ uv run poe init -y
   ☐ 限制直接推送到 dev/master
 
 🔑 GITHUB SECRETS (Settings → Secrets and variables → Actions)
-  根据需要配置部署 secrets：
-  ☐ DOCKER_REGISTRY_URL（例如 Docker Hub、GitHub Container Registry）
-  ☐ DOCKER_USERNAME
-  ☐ DOCKER_PASSWORD
-  ☐ SSH_PRIVATE_KEY（用于基于 SSH 的部署）
-  ☐ DEPLOY_HOST（部署服务器主机名）
-  ☐ 其他所需的云提供商凭据
+  ⚠️  当前未配置部署 workflows
+  ☐ 实现部署时需配置 secrets：
+     - .github/workflows/dev_deploy.yaml
+     - .github/workflows/prod_deploy.yaml
+  
+  常见部署 secrets 示例请参见 docs/github-setup.zh.md
 ```
 
 详细说明请参见 [GitHub 设置指南](github-setup.zh.md)。
