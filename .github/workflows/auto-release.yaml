@@ -1,0 +1,106 @@
+name: Auto Release
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+      
+      - name: Install dependencies
+        run: uv sync --all-extras
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Check if release is needed
+        id: check
+        run: |
+          CURRENT_VERSION=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
+          NEXT_VERSION=$(uv run semantic-release version --print 2>&1 | head -1)
+          
+          echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "next=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          
+          if [[ "$NEXT_VERSION" == "$CURRENT_VERSION" ]] || [[ -z "$NEXT_VERSION" ]]; then
+            echo "needed=false" >> $GITHUB_OUTPUT
+            echo "No release needed (current: $CURRENT_VERSION)"
+          else
+            echo "needed=true" >> $GITHUB_OUTPUT
+            echo "Release needed: $CURRENT_VERSION → $NEXT_VERSION"
+          fi
+      
+      - name: Run semantic-release
+        if: steps.check.outputs.needed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          uv run semantic-release version
+          uv run semantic-release changelog
+      
+      - name: Get new version
+        if: steps.check.outputs.needed == 'true'
+        id: version
+        run: |
+          NEW_VERSION=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+      
+      - name: Commit and push changes
+        if: steps.check.outputs.needed == 'true'
+        run: |
+          git add pyproject.toml CHANGELOG.md uv.lock
+          git commit -m "chore: release v${{ steps.version.outputs.version }}"
+          git push origin master
+      
+      - name: Create and push tag
+        if: steps.check.outputs.needed == 'true'
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          git tag -a "$TAG" -m "Release ${{ steps.version.outputs.version }}"
+          git push origin "$TAG"
+          echo "✅ Created and pushed tag: $TAG"
+      
+      - name: Summary
+        if: steps.check.outputs.needed == 'true'
+        run: |
+          echo "## 🎉 Release Created" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: v${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Previous**: v${{ steps.check.outputs.current }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps (Automatic)" >> $GITHUB_STEP_SUMMARY
+          echo "1. ✅ Tag v${{ steps.version.outputs.version }} created" >> $GITHUB_STEP_SUMMARY
+          echo "2. ✅ Production deployment will be triggered" >> $GITHUB_STEP_SUMMARY
+          echo "3. ✅ GitHub Release will be created" >> $GITHUB_STEP_SUMMARY
+          echo "4. ✅ Master will sync to dev" >> $GITHUB_STEP_SUMMARY
+      
+      - name: No release summary
+        if: steps.check.outputs.needed == 'false'
+        run: |
+          echo "## ℹ️ No Release Needed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Current version: v${{ steps.check.outputs.current }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "No feat/fix commits since last release." >> $GITHUB_STEP_SUMMARY

@@ -129,47 +129,6 @@ _tag_changelog = "semantic-release changelog"
 _tag_version = "semantic-release version --no-push"
 _tag_update_toml_version = { shell = "update-toml update --path project.version --value $(semantic-release version --print)" }
 
-[tool.poe.tasks.tag]
-shell = "bash scripts/tag.sh ${version}"
-args = [{ name = "version", options = ["--version"], type = "string", default = "auto" }]
-help = "DEPRECATED: Use 'prepare-tag' instead"
-
-[tool.poe.tasks.prepare-tag]
-shell = "bash scripts/prepare-tag.sh ${mode} ${version}"
-help = """
-Prepare a release or hotfix tag
-
-Usage:
-  uv run poe prepare-tag                    # Release, auto version (default)
-  uv run poe prepare-tag --release          # Release, auto version (explicit)
-  uv run poe prepare-tag 1.6.0              # Release, manual version
-  uv run poe prepare-tag --release 1.6.0    # Release, manual version (explicit)
-  uv run poe prepare-tag --hotfix 1.5.2     # Hotfix, manual version (required)
-
-Examples:
-  # Normal release with auto version
-  uv run poe prepare-tag
-
-  # Normal release with specific version
-  uv run poe prepare-tag 1.6.0
-
-  # Hotfix release (must specify version)
-  uv run poe prepare-tag --hotfix 1.5.2
-"""
-
-[[tool.poe.tasks.prepare-tag.args]]
-name = "mode"
-options = ["--release", "--hotfix"]
-default = "--release"
-type = "string"
-
-[[tool.poe.tasks.prepare-tag.args]]
-name = "version"
-positional = true
-required = false
-default = ""
-type = "string"
-
 [tool.poe.tasks.init]
 shell = "bash scripts/init.sh ${yes:+ -y}"
 args = [{ name = "yes", options = ["-y", "--yes"], type = "boolean" }]
