@@ -323,4 +323,4 @@ Use this checklist to ensure everything is configured:
 
 - [Learn the Development Workflow](development-workflow.md)
 - [Explore Features](features.md)
-- [Customize Workflows](.github/workflows/)
+- [Customize Workflows](../.github/workflows/)
