@@ -2,139 +2,186 @@
 
 [![Built with UV](https://img.shields.io/badge/built%20with-uv-7966C7)](https://github.com/astral-sh/uv)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196)](https://www.conventionalcommits.org)
-[![Base Template](https://img.shields.io/badge/-base_template-blue?logo=github)](https://github.com/GiovanniGiacometti/python-repo-template)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-[中文文档](README_zh.md)
+[中文文档](README_zh.md) | [Documentation](docs/)
 
-> Python project template powered by UV with fully automated CI/CD workflows, enabling developers to focus on code
+> A production-ready Python project template with automated CI/CD workflows, semantic versioning, and comprehensive quality gates.
 
-## 🚀 Core Features
+## ✨ What You Get
 
-- ⚡ **Blazing-fast Dependency Management** - Next-gen toolchain powered by UV
-- 🤖 **Automatic Version Control** - Semantic versioning based on Conventional Commits
-- 🔒 **Quality Gates** - Automated checks on every commit:
-  - ✅ Code Formatting (Black)
-  - ✅ Linting (Flake8)
-  - ✅ Unit Testing (Pytest)
-- 🛠️ **Smart Workflow Management** - Visual GitHub Actions control
+- **⚡ Lightning-fast Setup** - Get started in under 2 minutes with UV
+- **🤖 Automated Versioning** - Semantic versioning based on Conventional Commits
+- **🔒 Quality Gates** - Pre-commit hooks + PR gates (lint, test, type check)
+- **🚀 CI/CD Ready** - GitHub Actions workflows for dev/prod deployment
+- **📦 Auto-sync Branches** - Master changes automatically sync to dev
+- **📝 PR Templates** - Structured PR descriptions with checklists
+- **🏷️ Release Automation** - Auto-generate changelogs and GitHub releases
 
-## 🛠️ Environment Setup
+## 🚀 Quick Start
 
-### Prerequisites
+### 1. Use This Template
 
-1. Install UV:
-
-- MacOS:
-  ```bash
-  brew install uv
-  ```
-- Linux (Debian/Ubuntu/WSL):
-  ```bash
-  curl -LsSf https://astral.sh/uv/install.sh | sh
-  ```
-
-> 💡 Verify installation with `uv --version` (should return 0.5.x or higher). Full installation guide
-> at [UV documentation](https://docs.astral.sh/uv/installation).
-
-2. System Support:
-
-- ✅ Linux
-- ✅ macOS
-- ⚠️ Windows ([WSL supported](https://docs.astral.sh/uv/faq/#does-uv-work-on-windows))
-
-## 🏁 Quick Start
-
-### Initial Setup (First-time Use)
+Click "Use this template" on GitHub or:
 
 ```bash
-uv run poe init -- -y
+git clone https://github.com/jarlor/uv-python-repo-template.git my-project
+cd my-project
 ```
 
-The initialization script will:
+### 2. Install UV
 
-1. Configure project metadata
-2. Create Python virtual environment (in `.venv`)
-3. Install Git Hooks (pre-commit & commit-msg)
-
-Note: init performs branch/workflow setup and requires `-y` to proceed.
-
-## ✍️ Commit Convention
-
-### Message Format
-
+**macOS/Linux:**
 ```bash
-<type>([scope]): <subject>
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-#### Type Reference
+**macOS (Homebrew):**
+```bash
+brew install uv
+```
 
-| Type                  | Version Impact | Example Scenarios                                  |
-|-----------------------|----------------|----------------------------------------------------|
-| `feat`                | **Minor** ↑    | Add user authentication                            |
-| `fix`                 | **Patch** ↑    | Fix payment timeout                                |
-| `BREAKING CHANGE`     | **Major** ↑    | Remove legacy API (use `!` or body)                |
-| `docs`/`style`/`test` | No impact      | Documentation updates, code formatting, test cases |
+**Windows:** See [UV installation guide](https://docs.astral.sh/uv/installation)
 
-### Examples
-
-- `feat: Add user registration API` ➔ **Minor** version bump (`v1.2.3` → `v1.3.0`)
-- `fix: Resolve password validation` ➔ **Patch** version bump (`v1.2.3` → `v1.2.4`)
-- `feat!: Remove deprecated API` ➔ **Major** version bump (`v1.2.3` → `v2.0.0`)
-- `docs: Update API documentation` ➔ No version change
-- `style: Code formatting` ➔ No version change
-- `test: Add unit tests` ➔ No version change
-
-> 💡 Use `!` in commit message or include `BREAKING CHANGE:` in body for breaking changes
-
-## 🏷️ Version Tagging
-
-Generate semantic version tags:
+### 3. Initialize Project
 
 ```bash
+uv run poe init -y
+```
+
+This will:
+- Rename the project to match your directory name
+- Set up `dev` and `master` branches
+- Install pre-commit hooks
+- Display post-init checklist
+
+### 4. Start Developing
+
+```bash
+# Create a feature branch
+git checkout -b feature/my-feature
+
+# Make changes and commit
+git add .
+git commit -m "feat: add new feature"
+
+# Push and create PR
+git push origin feature/my-feature
+```
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Getting Started](docs/getting-started.md) | Detailed setup and initialization guide |
+| [GitHub Setup](docs/github-setup.md) | Configure branch protection, secrets, and Actions |
+| [Development Workflow](docs/development-workflow.md) | Standard development process and best practices |
+| [Features](docs/features.md) | In-depth feature explanations |
+
+## 🎯 Key Features
+
+### Automated Workflows
+
+- **PR Gate** - Runs on every PR to `dev`/`master`
+  - Code formatting (Ruff)
+  - Linting (Ruff + mypy)
+  - Unit tests (pytest)
+  - Smoke tests
+
+- **Dev Deploy** - Triggers on merge to `dev`
+  - Auto-deploy to dev environment
+  - Health checks
+  - Rollback support
+
+- **Prod Deploy** - Triggers on tag push
+  - Build immutable artifacts
+  - Deploy to production
+  - Create GitHub Release
+  - Auto-sync to dev branch
+
+### Branch Strategy
+
+```
+feature/* → dev → master
+              ↓      ↓
+           dev env  prod env
+```
+
+- `dev` - Integration branch (auto-deploys to dev environment)
+- `master` - Production branch (deploys on tag)
+- Direct pushes to `dev`/`master` are blocked (PR only)
+
+### Commit Convention
+
+Follow [Conventional Commits](https://www.conventionalcommits.org):
+
+```
+<type>(<scope>): <subject>
+```
+
+**Version Impact:**
+- `feat:` → Minor version bump (v1.2.3 → v1.3.0)
+- `fix:` → Patch version bump (v1.2.3 → v1.2.4)
+- `feat!:` or `BREAKING CHANGE:` → Major version bump (v1.2.3 → v2.0.0)
+
+### Release Process
+
+```bash
+# On master branch
 uv run poe tag
+
+# Push tags
+git push origin master --tags
 ```
 
-This command automatically:
+This automatically:
+1. Calculates next version based on commits
+2. Updates `CHANGELOG.md`
+3. Creates git tag
+4. Triggers production deployment
+5. Creates GitHub Release
+6. Syncs changes back to dev
 
-1. Calculates version number (based on commit history)
-2. Generates CHANGELOG
-3. Commits tag
-
-## 🔄 Code Push
-
-Standard push commands:
+## 🛠️ Available Commands
 
 ```bash
-git push origin main # Push main branch
-git push --tags # Push tags
+# Development
+uv run poe format          # Format code with Ruff
+uv run poe lint            # Run linters (Ruff + mypy)
+uv run poe test            # Run tests with pytest
+uv run poe smoke           # Run smoke tests
+
+# Release
+uv run poe tag             # Create version tag and update changelog
+
+# Setup
+uv run poe init -y         # Initialize project (first-time setup)
 ```
 
-> 💡 Ensure tags are pushed to remote to trigger GitHub Actions workflows
+## 📋 Requirements
 
-## 🤖 GitHub Actions
+- Python 3.10+
+- UV 0.5.0+
+- Git
 
-Workflows live in `.github/workflows` and are enabled by default. Adjust triggers or disable
-by renaming a workflow file if needed.
+## 🤝 Contributing
 
-## Acknowledgments
+This is a template repository. Feel free to fork and customize for your needs.
 
-Original inspiration and base template
-from [python-repo-template](https://github.com/GiovanniGiacometti/python-repo-template).
+## 📄 License
 
-## Collaborators
+MIT License - see [LICENSE](LICENSE) for details.
 
-<!-- readme: collaborators,contributors -start -->
-<table>
-	<tbody>
-		<tr>
-            <td align="center">
-                <a href="https://github.com/jarlor">
-                    <img src="https://avatars.githubusercontent.com/u/53697817?v=4" width="100;" alt="jarlor"/>
-                    <br />
-                    <sub><b>Jarlor Zhang</b></sub>
-                </a>
-            </td>
-		</tr>
-	<tbody>
-</table>
-<!-- readme: collaborators,contributors -end -->
+## 🙏 Acknowledgments
+
+Original inspiration from [python-repo-template](https://github.com/GiovanniGiacometti/python-repo-template).
+
+## 📞 Support
+
+- [Documentation](docs/)
+- [Issues](https://github.com/jarlor/uv-python-repo-template/issues)
+- [Discussions](https://github.com/jarlor/uv-python-repo-template/discussions)
+
+---
+
+**Made with ❤️ using [UV](https://github.com/astral-sh/uv)**
