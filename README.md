@@ -132,36 +132,50 @@ Follow [Conventional Commits](https://www.conventionalcommits.org):
 
 ### Release Process
 
-**Automatic versioning (default):**
-```bash
-# On master branch
-uv run poe tag
+**Normal Release (from dev branch):**
 
-# Push tags
-git push origin master --tags
+```bash
+# 1. Prepare release (auto version calculation)
+git checkout dev
+git pull origin dev
+uv run poe prepare-tag
+
+# 2. Push and create PR
+git push origin release/vX.Y.Z
+gh pr create --title "chore: release vX.Y.Z" --base master
+
+# 3. Merge PR
+# → Tag is created automatically by GitHub Actions
+# → Production deployment triggered
+# → GitHub Release created
+# → Changes synced to dev
 ```
 
-This automatically:
-1. Calculates next version based on commits
-2. Updates `CHANGELOG.md`
-3. Creates git tag
-4. Triggers production deployment
-5. Creates GitHub Release
-6. Syncs changes back to dev
-
-**Manual versioning (when needed):**
+**Manual version (when auto-calculation fails):**
 ```bash
 # Specify version manually
-uv run poe tag --version 1.5.0
-
-# Push tags
-git push origin master --tags
+uv run poe prepare-tag 1.6.0
 ```
 
-Use manual versioning when:
-- semantic-release refuses to create a new version
-- Only documentation changes were made
-- Specific version number needed
+**Hotfix Release (from master branch):**
+```bash
+# 1. Prepare hotfix
+git checkout master
+git pull origin master
+uv run poe prepare-tag --hotfix 1.5.2
+
+# 2. Fix the bug, update CHANGELOG, push and create PR
+git push origin hotfix/v1.5.2
+gh pr create --title "fix: critical issue (v1.5.2)" --base master
+
+# 3. Merge PR → Tag created automatically
+```
+
+**Key Points:**
+- ✅ All releases go through PR review
+- ✅ Tags are created automatically after PR merge
+- ✅ Version is calculated automatically (semantic-release)
+- ✅ Manual version available when needed
 
 ## 🛠️ Available Commands
 
@@ -173,7 +187,9 @@ uv run poe test            # Run tests with pytest
 uv run poe smoke           # Run smoke tests
 
 # Release
-uv run poe tag             # Create version tag and update changelog
+uv run poe prepare-tag                    # Prepare release (auto version)
+uv run poe prepare-tag 1.6.0              # Prepare release (manual version)
+uv run poe prepare-tag --hotfix 1.5.2     # Prepare hotfix
 
 # Setup
 uv run poe init -y         # Initialize project (first-time setup)

@@ -250,7 +250,7 @@ def test_add_numbers_type_error():
 │   └── test_main.py             # Test files
 ├── scripts/
 │   ├── init.sh                  # Project initialization
-│   ├── poe_action.py            # Workflow management
+│   ├── prepare-tag.sh           # Release/hotfix preparation
 │   └── extract_release_notes.sh # Release automation
 ├── .github/workflows/           # CI/CD workflows
 ├── pyproject.toml               # Project config & poe tasks
@@ -282,6 +282,53 @@ Follow [Conventional Commits](https://www.conventionalcommits.org):
 ## Workflow Management
 
 Workflows live in `.github/workflows` and are enabled by default.
+
+## Release Process
+
+### Normal Release (from dev)
+
+```bash
+# 1. Prepare release (auto version)
+git checkout dev
+git pull origin dev
+uv run poe prepare-tag
+
+# 2. Push and create PR
+git push origin release/vX.Y.Z
+gh pr create --title "chore: release vX.Y.Z" --base master
+
+# 3. Merge PR
+# → Tag created automatically by GitHub Actions
+# → Production deployment triggered
+```
+
+### Manual Version
+
+```bash
+# Specify version when semantic-release can't calculate
+uv run poe prepare-tag 1.6.0
+```
+
+### Hotfix Release (from master)
+
+```bash
+# 1. Prepare hotfix
+git checkout master
+git pull origin master
+uv run poe prepare-tag --hotfix 1.5.2
+
+# 2. Fix bug, update CHANGELOG, push and create PR
+git push origin hotfix/v1.5.2
+gh pr create --title "fix: critical issue (v1.5.2)" --base master
+
+# 3. Merge PR → Tag created automatically
+```
+
+**Key Points:**
+- All releases go through PR review
+- Tags are created automatically after PR merge (via `auto-tag-on-release.yaml`)
+- Version is calculated automatically using semantic-release
+- Branch naming is critical: `release/vX.Y.Z` or `hotfix/vX.Y.Z`
 
 ## Key Files to Know
 
