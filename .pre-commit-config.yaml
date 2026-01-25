@@ -1,14 +1,47 @@
 repos:
   - repo: local
     hooks:
-      - id: lint
-        name: Code Formatting
-        entry: uv run poe lint
+      - id: format
+        name: Format (ruff)
+        entry: uv run poe format
         language: system
         pass_filenames: false
         types: [python]
         verbose: true
         stages: [pre-commit]
         args: []
+        require_serial: true
+        log_file: .pre-commit.log
+
+      - id: lint-ruff
+        name: Lint (ruff)
+        entry: uv run poe lint_ruff
+        language: system
+        pass_filenames: false
+        types: [python]
+        verbose: true
+        stages: [pre-commit]
+        args: []
+        require_serial: true
+        log_file: .pre-commit.log
+
+      - id: lint-mypy
+        name: Lint (mypy)
+        entry: uv run poe lint_mypy
+        language: system
+        pass_filenames: false
+        types: [python]
+        verbose: true
+        stages: [pre-commit]
+        args: []
+        require_serial: true
+        log_file: .pre-commit.log
+
+      - id: commit-msg
+        name: Conventional Commit Message
+        entry: uv run python scripts/check_commit_message.py
+        language: system
+        verbose: true
+        stages: [commit-msg]
         require_serial: true
         log_file: .pre-commit.log

@@ -47,7 +47,7 @@
 ### Initial Setup (First-time Use)
 
 ```bash
-bash ./scripts/init.sh
+uv run poe init -- -y
 ```
 
 The initialization script will:
@@ -55,6 +55,8 @@ The initialization script will:
 1. Configure project metadata
 2. Create Python virtual environment (in `.venv`)
 3. Install Git Hooks (pre-commit & commit-msg)
+
+Note: init performs branch/workflow setup and requires `-y` to proceed.
 
 ## ✍️ Commit Convention
 
@@ -109,30 +111,10 @@ git push --tags # Push tags
 
 > 💡 Ensure tags are pushed to remote to trigger GitHub Actions workflows
 
-## 🤖 GitHub Actions Management
+## 🤖 GitHub Actions
 
-### Workflow List
-
-View available workflows:
-
-```bash
-uv run poe action list
-```
-
-Default workflows: `release`, `publish`, `lint-test`
-
-### Workflow Control
-
-Enable/disable workflows:
-
-```bash
-uv run poe action toggle --enable release --commit # Enable release workflow and commit
-uv run poe action toggle --disable release --commit # Disable release workflow and commit
-uv run poe action toggle --enable publish # Enable publish workflow
-uv run poe action toggle --disable publish # Disable publish workflow
-```
-
-> ⚠️ System will prompt for required environment variables when enabling workflows
+Workflows live in `.github/workflows` and are enabled by default. Adjust triggers or disable
+by renaming a workflow file if needed.
 
 ## Acknowledgments
 
