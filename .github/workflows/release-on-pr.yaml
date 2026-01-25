@@ -62,6 +62,43 @@ jobs:
           
           echo "✅ Created and pushed tag: $TAG"
       
+      - name: Install uv
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: astral-sh/setup-uv@v5
+      
+      - name: Set up Python
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+      
+      - name: Extract Release Notes
+        if: steps.check_tag.outputs.exists == 'false'
+        id: release_notes
+        run: |
+          bash scripts/extract_release_notes.sh > release_notes.md
+          echo "✅ Extracted release notes"
+      
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          body_path: release_notes.md
+          token: ${{ secrets.GITHUB_TOKEN }}
+          make_latest: true
+      
+      - name: Sync master to dev
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin dev
+          git checkout dev
+          git merge origin/master --no-edit
+          git push origin dev
+          echo "✅ Synced master to dev"
+      
       - name: Summary
         run: |
           VERSION="${{ steps.version.outputs.version }}"
@@ -78,10 +115,12 @@ jobs:
             echo "### ⚠️  Tag Already Exists" >> $GITHUB_STEP_SUMMARY
             echo "Tag v$VERSION already exists, skipped creation." >> $GITHUB_STEP_SUMMARY
           else
-            echo "### ✅ Tag Created Successfully" >> $GITHUB_STEP_SUMMARY
+            echo "### ✅ Release Complete" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Next Steps (Automatic):**" >> $GITHUB_STEP_SUMMARY
-            echo "1. ✅ Production deployment will be triggered" >> $GITHUB_STEP_SUMMARY
-            echo "2. ✅ GitHub Release will be created" >> $GITHUB_STEP_SUMMARY
-            echo "3. ✅ Master will sync to dev" >> $GITHUB_STEP_SUMMARY
+            echo "**Completed Actions:**" >> $GITHUB_STEP_SUMMARY
+            echo "1. ✅ Created tag v$VERSION" >> $GITHUB_STEP_SUMMARY
+            echo "2. ✅ Created GitHub Release" >> $GITHUB_STEP_SUMMARY
+            echo "3. ✅ Synced master to dev" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**View Release:** https://github.com/${{ github.repository }}/releases/tag/v$VERSION" >> $GITHUB_STEP_SUMMARY
           fi
