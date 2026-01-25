@@ -46,7 +46,7 @@
 ### 项目初始化（首次使用）
 
 ```bash
-bash ./scripts/init.sh
+uv run poe init -- -y
 ```
 
 初始化脚本将完成：
@@ -54,6 +54,8 @@ bash ./scripts/init.sh
 1. 项目元数据配置
 2. Python 虚拟环境创建（位于 `.venv`）
 3. Git Hook 安装（pre-commit & commit-msg）
+
+注意：init 会做分支/工作流初始化，需要加 `-y` 才会继续执行。
 
 ## ✍️ 提交规范
 
@@ -108,31 +110,9 @@ git push --tags # 推送标签
 
 > 💡 如果本地产生标签，确保推送标签到远程仓库才能触发 GitHub Actions 工作流
 
-## 🤖 GitHub Actions 管理
+## 🤖 GitHub Actions
 
-### 工作流清单
-
-查看可用工作流：
-
-```bash
-uv run poe action list
-```
-
-该命令将列出所有可用的工作流及其状态。默认提供了 `release`,`publish`,`lint-test`三个工作流
-
-### 工作流控制
-
-启用/禁用工作流：
-
-```bash
-uv run poe action toggle --enable release --commit # 启用release工作流并提交
-uv run poe action toggle --disable release --commit # 禁用release工作流并提交
-
-uv run poe action toggle --enable publish # 启用publish工作流
-uv run poe action toggle --disable publish # 禁用publish工作流
-```
-
-> ⚠️ 启用工作流前会提示所需环境变量
+工作流位于 `.github/workflows`，默认启用。需要调整时，可修改触发条件或重命名文件禁用。
 
 ### 致谢
 

@@ -1,0 +1,20 @@
+name: Deploy to Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy (TODO)
+        run: |
+          echo "TODO: publish artifact"
+          echo "TODO: update ECS service (web/worker)"
+          echo "TODO: healthcheck + snapshot + rollback link"
+          exit 0

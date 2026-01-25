@@ -7,65 +7,12 @@ license = { text = "MIT" }
 authors = [{ name = "jarlor", email = "jarlorzhang@outlook.com" }]
 requires-python = ">=3.10"
 
-
-
 [project.scripts]
 uv_python_repo_template = "uv_python_repo_template:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.poe.tasks]
-# lint and format tasks
-format = "ruff format --line-length 100"
-check = "ruff check src/ --fix"
-_lint_mypy = "mypy --ignore-missing-imports --install-types --non-interactive --package src.uv_python_repo_template"
-
-# test tasks
-test = "pytest --verbose --color=yes tests"
-
-# init tasks
-_init_install-hooks = "pre-commit install"
-
-# semantic-release tasks
-_tag_changelog = "semantic-release changelog"
-_tag_version = "semantic-release version --no-push"
-_tag_update_toml_version = { shell = "update-toml update --path project.version --value $(semantic-release version --print)" }
-
-[tool.poe.tasks.action]
-cmd = "python scripts/poe_action.py"
-
-
-[[tool.poe.tasks.lint]]
-sequence = [
-    "check",
-    "_lint_mypy"
-]
-ignore_fail = 'return_non_zero'
-
-[[tool.poe.tasks.init]]
-sequence = [
-    "_init_install-hooks"
-]
-ignore_fail = 'return_non_zero'
-
-[[tool.poe.tasks.validate]]
-sequence = [
-    "lint",
-    "test"
-]
-ignore_fail = 'return_non_zero'
-
-
-[[tool.poe.tasks.tag]]
-sequence = [
-    "validate",
-    "_tag_changelog",
-    "_tag_update_toml_version",
-    "_tag_version"
-]
-
 
 [dependency-groups]
 dev = [
@@ -78,8 +25,46 @@ dev = [
     "update-toml>=0.2.1",
 ]
 
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src"]
+
+[tool.mypy]
+python_version = "3.10"
+mypy_path = ["src"]
+files = ["src"]
+ignore_missing_imports = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "--verbose --color=yes"
+
+[tool.poe.tasks]
+format = "ruff format"
+
+lint_ruff = "ruff check src/"
+lint_mypy = "mypy --install-types --non-interactive"
+lint = { sequence = ["lint_ruff", "lint_mypy"] }
+
+test = "pytest"
+
+smoke = { shell = "python -c 'import uv_python_repo_template as p; p.main()'" }
+
+_tag_changelog = "semantic-release changelog"
+_tag_version = "semantic-release version --no-push"
+_tag_update_toml_version = { shell = "update-toml update --path project.version --value $(semantic-release version --print)" }
+tag = { sequence = ["lint", "test", "smoke", "_tag_changelog", "_tag_update_toml_version", "_tag_version"] }
+
+[tool.poe.tasks.init]
+shell = "bash scripts/init.sh ${yes:+ -y}"
+args = [{ name = "yes", options = ["-y", "--yes"], type = "boolean" }]
 
 [semantic_release]
-assets = ["pyproject.toml","uv.lock"]
+assets = ["pyproject.toml", "uv.lock"]
+
 [semantic_release.remote]
 ignore_token_for_push = true

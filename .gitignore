@@ -17,3 +17,7 @@ wheels/
 uv.lock
 
 .pre-commit.log
+
+# OS/editor files
+.DS_Store
+.idea/
