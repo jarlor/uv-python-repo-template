@@ -107,9 +107,15 @@ feature/* → dev → master
            dev env  prod env
 ```
 
-- `dev` - Integration branch (auto-deploys to dev environment)
-- `master` - Production branch (deploys on tag)
-- Direct pushes to `dev`/`master` are blocked (PR only)
+**Branch Protection:**
+- `master` - **Hard protection** (GitHub): Requires PR + status checks
+- `dev` - **Soft protection** (local pre-push hook): Blocks direct push, allows auto-sync from master
+- Direct pushes blocked, PR workflow enforced
+
+**Why this approach?**
+- Master protection is critical for production code quality
+- Dev protection is flexible to allow automated master → dev sync
+- No complex GitHub App setup needed for branch synchronization
 
 ### Commit Convention
 

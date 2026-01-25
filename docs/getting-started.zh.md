@@ -100,10 +100,13 @@ uv run poe init -y
   ☐ 在 .github/workflows/prod_deploy.yaml 中实现部署步骤
 
 🔒 GITHUB 分支保护 (Settings → Branches)
-  ☐ 保护 'dev' 和 'master' 分支
+  ☐ 保护 'master' 分支（必需）
   ☐ 合并前需要 pull request 审查
   ☐ 需要状态检查通过："PR Gate"
-  ☐ 限制直接推送到 dev/master
+  ☐ 限制直接推送到 master
+  
+  ⚠️  不要在 GitHub 上保护 'dev' 分支
+  ℹ️  Dev 通过本地 pre-push hook 保护
 
 🔑 GITHUB SECRETS (Settings → Secrets and variables → Actions)
   ⚠️  当前未配置部署 workflows
