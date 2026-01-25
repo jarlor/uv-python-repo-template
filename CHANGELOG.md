@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.4.0 (2026-01-25)
+
+### Features
+
+- Add independent sync workflow for all master pushes
+  ([`1a7c995`](https://github.com/jarlor/uv-python-repo-template/commit/1a7c995aa632c6588534f20c416183f0722a5425))
+
+
 ## v1.3.4 (2026-01-25)
 
 ### Bug Fixes
@@ -29,6 +37,11 @@
 
 - Add PR template to default branch for GitHub template loading
   ([`e16ea68`](https://github.com/jarlor/uv-python-repo-template/commit/e16ea6833ad22ce347a67a9d5c2cb19201063dd7))
+
+### Features
+
+- Auto-sync master to dev after release creation
+  ([`fb11546`](https://github.com/jarlor/uv-python-repo-template/commit/fb11546f6bc7b8e6c976d5b218333ae62f6f67eb))
 
 
 ## v1.3.3 (2025-04-08)
