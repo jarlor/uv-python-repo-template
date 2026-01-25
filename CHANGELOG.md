@@ -5,6 +5,9 @@
 
 ### Bug Fixes
 
+- Allow semantic-release version commits in commit-msg hook
+  ([`cce3ea0`](https://github.com/jarlor/uv-python-repo-template/commit/cce3ea0386217211ff74755c54d08d78f18a4240))
+
 - Remove .venv deletion from initialization script
   ([`1a45520`](https://github.com/jarlor/uv-python-repo-template/commit/1a4552097de2d5a791ca2f2e10fcf625115d589d))
 
