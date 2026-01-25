@@ -35,6 +35,11 @@ def _is_revert_commit(first_line: str) -> bool:
     return first_line.startswith("Revert ")
 
 
+def _is_version_commit(first_line: str) -> bool:
+    """Check if commit is a semantic-release version commit (e.g., '1.3.4')"""
+    return bool(re.match(r"^\d+\.\d+\.\d+$", first_line))
+
+
 def main(argv: list[str]) -> int:
     if len(argv) != 2:
         print("Usage: check_commit_message.py <commit-msg-file>")
@@ -53,8 +58,12 @@ def main(argv: list[str]) -> int:
         print("Commit message is empty")
         return 1
 
-    # Allow merge commits created by git.
-    if _is_merge_commit(first_line) or _is_revert_commit(first_line):
+    # Allow merge commits, revert commits, and semantic-release version commits.
+    if (
+        _is_merge_commit(first_line)
+        or _is_revert_commit(first_line)
+        or _is_version_commit(first_line)
+    ):
         return 0
 
     match = _CONVENTIONAL_RE.match(first_line)

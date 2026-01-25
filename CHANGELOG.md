@@ -1,6 +1,36 @@
 # CHANGELOG
 
 
+## v1.3.4 (2026-01-25)
+
+### Bug Fixes
+
+- Allow semantic-release version commits in commit-msg hook
+  ([`cce3ea0`](https://github.com/jarlor/uv-python-repo-template/commit/cce3ea0386217211ff74755c54d08d78f18a4240))
+
+- Remove .venv deletion from initialization script
+  ([`1a45520`](https://github.com/jarlor/uv-python-repo-template/commit/1a4552097de2d5a791ca2f2e10fcf625115d589d))
+
+### Build System
+
+- Rename project to uv_python_repo_template
+  ([`a88bd33`](https://github.com/jarlor/uv-python-repo-template/commit/a88bd332eb8347b35cc870c9f4d04be0fee0795d))
+
+### Continuous Integration
+
+- Sync PR template to master via standard flow
+  ([`12926a1`](https://github.com/jarlor/uv-python-repo-template/commit/12926a1b70dd02bdb662afd6e8a0d99c5dcc5274))
+
+- Sync PR template to master via standard flow
+  ([#1](https://github.com/jarlor/uv-python-repo-template/pull/1),
+  [`cb9e12a`](https://github.com/jarlor/uv-python-repo-template/commit/cb9e12ab7aa3258e2f295d60a4f069b74033659d))
+
+### Documentation
+
+- Add PR template to default branch for GitHub template loading
+  ([`e16ea68`](https://github.com/jarlor/uv-python-repo-template/commit/e16ea6833ad22ce347a67a9d5c2cb19201063dd7))
+
+
 ## v1.3.3 (2025-04-08)
 
 ### Bug Fixes
