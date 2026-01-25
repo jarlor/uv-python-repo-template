@@ -250,7 +250,6 @@ def test_add_numbers_type_error():
 │   └── test_main.py             # Test files
 ├── scripts/
 │   ├── init.sh                  # Project initialization
-│   ├── prepare-tag.sh           # Release/hotfix preparation
 │   └── extract_release_notes.sh # Release automation
 ├── .github/workflows/           # CI/CD workflows
 ├── pyproject.toml               # Project config & poe tasks
@@ -285,50 +284,32 @@ Workflows live in `.github/workflows` and are enabled by default.
 
 ## Release Process
 
-### Normal Release (from dev)
+**Fully Automated via GitHub Actions:**
 
 ```bash
-# 1. Prepare release (auto version)
+# 1. Develop on dev branch
 git checkout dev
-git pull origin dev
-uv run poe prepare-tag
+git commit -m "feat: add new feature"
+git push origin dev
 
-# 2. Push and create PR
-git push origin release/vX.Y.Z
-gh pr create --title "chore: release vX.Y.Z" --base master
+# 2. Create PR to master
+gh pr create --title "feat: add new feature" --base master
 
 # 3. Merge PR
-# → Tag created automatically by GitHub Actions
-# → Production deployment triggered
-```
-
-### Manual Version
-
-```bash
-# Specify version when semantic-release can't calculate
-uv run poe prepare-tag 1.6.0
-```
-
-### Hotfix Release (from master)
-
-```bash
-# 1. Prepare hotfix
-git checkout master
-git pull origin master
-uv run poe prepare-tag --hotfix 1.5.2
-
-# 2. Fix bug, update CHANGELOG, push and create PR
-git push origin hotfix/v1.5.2
-gh pr create --title "fix: critical issue (v1.5.2)" --base master
-
-# 3. Merge PR → Tag created automatically
+# → GitHub Actions automatically:
+#    - Runs semantic-release to calculate version
+#    - Updates pyproject.toml and CHANGELOG.md
+#    - Creates commit on master
+#    - Creates and pushes tag
+#    - Triggers production deployment
 ```
 
 **Key Points:**
-- All releases go through PR review
-- Tags are created automatically after PR merge (via `auto-tag-on-release.yaml`)
-- Version is calculated automatically using semantic-release
-- Branch naming is critical: `release/vX.Y.Z` or `hotfix/vX.Y.Z`
+- Completely automated - no manual version management
+- Version calculated from conventional commits
+- Tags created on master automatically (via `auto-release.yaml`)
+- All changes go through PR review
+- semantic-release runs in CI, not locally
 
 ## Key Files to Know
 
