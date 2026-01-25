@@ -54,7 +54,10 @@ The initialization script will:
 
 1. Configure project metadata
 2. Create Python virtual environment (in `.venv`)
-3. Install Git Hooks (pre-commit & commit-msg)
+3. Install Git Hooks:
+   - `pre-commit`: Format and lint code before commit
+   - `commit-msg`: Validate commit message format
+   - `pre-push`: Block direct push to `dev` branch (requires PR workflow)
 
 Note: init performs branch/workflow setup and requires `-y` to proceed.
 

@@ -132,3 +132,9 @@ else
 fi
 
 pre-commit install --hook-type pre-commit --hook-type commit-msg
+
+if [[ -f "scripts/pre-push.sh" ]]; then
+    cp scripts/pre-push.sh .git/hooks/pre-push
+    chmod +x .git/hooks/pre-push
+    echo "✓ Pre-push hook installed (blocks direct push to dev branch)"
+fi

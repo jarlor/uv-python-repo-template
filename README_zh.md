@@ -53,7 +53,10 @@ uv run poe init -- -y
 
 1. 项目元数据配置
 2. Python 虚拟环境创建（位于 `.venv`）
-3. Git Hook 安装（pre-commit & commit-msg）
+3. Git Hook 安装：
+   - `pre-commit`: 提交前格式化和检查代码
+   - `commit-msg`: 验证提交信息格式
+   - `pre-push`: 阻止直接推送到 `dev` 分支（要求使用 PR 流程）
 
 注意：init 会做分支/工作流初始化，需要加 `-y` 才会继续执行。
 
