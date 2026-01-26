@@ -1,3 +1,7 @@
+# ============================================================================
+# Project Metadata
+# ============================================================================
+
 [project]
 name = "uv_python_repo_template"
 version = "1.6.0"
@@ -22,32 +26,15 @@ dev = [
     "update-toml>=0.2.1",
 ]
 
+# ============================================================================
+# Ruff Configuration (Linting & Formatting)
+# ============================================================================
+
 [tool.ruff]
 line-length = 100
 target-version = "py310"
 src = ["src"]
 
-# Enable specific rule sets
-lint.select = [
-    "E",      # pycodestyle errors
-    "W",      # pycodestyle warnings
-    "F",      # pyflakes
-    "I",      # isort (import sorting)
-    "UP",     # pyupgrade
-    "B",      # flake8-bugbear
-    "SIM",    # flake8-simplify
-]
-
-# Ignore specific rules
-lint.ignore = [
-    "E501",   # line-too-long (handled by formatter)
-]
-
-# Allow autofix for all enabled rules
-lint.fixable = ["ALL"]
-lint.unfixable = []
-
-# Exclude patterns
 extend-exclude = [
     "__pycache__",
     ".git",
@@ -58,6 +45,24 @@ extend-exclude = [
     "*.egg-info",
 ]
 
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort (import sorting)
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+]
+
+ignore = [
+    "E501",   # line-too-long (handled by formatter)
+]
+
+fixable = ["ALL"]
+unfixable = []
+
 [tool.ruff.lint.isort]
 known-first-party = ["uv_python_repo_template"]
 force-single-line = false
@@ -66,12 +71,15 @@ lines-after-imports = 2
 [tool.ruff.lint.mccabe]
 max-complexity = 10
 
+# ============================================================================
+# Mypy Configuration (Type Checking)
+# ============================================================================
+
 [tool.mypy]
 python_version = "3.10"
 mypy_path = ["src"]
 files = ["src"]
 
-# Relaxed type checking
 check_untyped_defs = true
 warn_unused_configs = true
 warn_redundant_casts = true
@@ -79,7 +87,6 @@ warn_unused_ignores = false
 warn_return_any = false
 warn_unreachable = true
 
-# Allow flexibility
 disallow_untyped_defs = false
 disallow_any_generics = false
 disallow_subclassing_any = false
@@ -92,22 +99,31 @@ show_error_codes = true
 show_column_numbers = true
 pretty = true
 
+# ============================================================================
+# Pytest Configuration (Testing)
+# ============================================================================
+
 [tool.pytest.ini_options]
 minversion = "8.0"
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "--verbose --color=yes"
 
+# ============================================================================
+# Poe the Poet Tasks (Task Runner)
+# ============================================================================
+
 [tool.poe.tasks]
-format = "ruff format"
+format = { cmd = "ruff format", help = "Format code with Ruff" }
+format-check = { cmd = "ruff format --check", help = "Check code formatting" }
 
-lint_ruff = "ruff check src/"
-lint_mypy = "mypy --install-types --non-interactive"
-lint = { sequence = ["lint_ruff", "lint_mypy"] }
+lint-ruff = { cmd = "ruff check --fix src/", help = "Lint and auto-fix with Ruff" }
+lint-mypy = { cmd = "mypy --install-types --non-interactive", help = "Type check with mypy" }
+lint = { sequence = ["lint-ruff", "lint-mypy"], help = "Run all linters" }
 
-test = "pytest"
+test = { cmd = "pytest", help = "Run tests with pytest" }
 
-smoke = { shell = "python -c 'import uv_python_repo_template as p; p.main()'" }
+smoke = { shell = "python -c 'import uv_python_repo_template as p; p.main()'", help = "Run smoke test" }
 
 [tool.poe.tasks.tag]
 shell = "bash scripts/tag.sh ${version}"
@@ -117,6 +133,11 @@ help = "Prepare a release (auto: uv run poe tag, manual: uv run poe tag --versio
 [tool.poe.tasks.init]
 shell = "bash scripts/init.sh ${yes:+ -y}"
 args = [{ name = "yes", options = ["-y", "--yes"], type = "boolean" }]
+help = "Initialize project (first-time setup)"
+
+# ============================================================================
+# Semantic Release Configuration (Versioning & Changelog)
+# ============================================================================
 
 [tool.semantic_release]
 assets = ["pyproject.toml", "uv.lock"]
