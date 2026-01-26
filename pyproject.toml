@@ -137,6 +137,16 @@ args = [{ name = "yes", options = ["-y", "--yes"], type = "boolean" }]
 [semantic_release]
 assets = ["pyproject.toml", "uv.lock"]
 
+[semantic_release.changelog]
+changelog_file = "CHANGELOG.md"
+exclude_commit_patterns = []
+
+[semantic_release.changelog.environment]
+block_start_string = "{%"
+block_end_string = "%}"
+variable_start_string = "{{"
+variable_end_string = "}}"
+
 [semantic_release.branches.main]
 match = "master"
 prerelease = false
