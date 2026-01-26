@@ -6,7 +6,7 @@ on:
     branches: [master]
 
 jobs:
-  create-release-tag:
+  create-release:
     if: |
       github.event.pull_request.merged == true &&
       startsWith(github.event.pull_request.head.ref, 'release/')
@@ -22,77 +22,53 @@ jobs:
           ref: master
           fetch-depth: 0
       
-      - name: Extract version from pyproject.toml
-        id: version
-        run: |
-          VERSION=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
-          
-          if [ -z "$VERSION" ]; then
-            echo "❌ Failed to extract version from pyproject.toml"
-            exit 1
-          fi
-          
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "✅ Extracted version: $VERSION"
-      
-      - name: Check if tag already exists
-        id: check_tag
-        run: |
-          TAG="v${{ steps.version.outputs.version }}"
-          
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "⚠️  Tag $TAG already exists"
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "✅ Tag $TAG does not exist, will create"
-          fi
-      
-      - name: Create and push tag
-        if: steps.check_tag.outputs.exists == 'false'
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          TAG="v$VERSION"
-          
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          git tag -a "$TAG" -m "Release $VERSION"
-          git push origin "$TAG"
-          
-          echo "✅ Created and pushed tag: $TAG"
-      
       - name: Install uv
-        if: steps.check_tag.outputs.exists == 'false'
         uses: astral-sh/setup-uv@v5
       
       - name: Set up Python
-        if: steps.check_tag.outputs.exists == 'false'
         uses: actions/setup-python@v5
         with:
           python-version-file: ".python-version"
       
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Run semantic-release
+        id: release
+        run: |
+          # Run semantic-release version to:
+          # 1. Calculate next version
+          # 2. Update pyproject.toml
+          # 3. Generate CHANGELOG.md
+          # 4. Update uv.lock
+          # 5. Create commit
+          # 6. Create tag
+          # 7. Push to remote
+          uv run semantic-release version --no-vcs-release
+          
+          # Extract version from the created tag
+          VERSION=$(git describe --tags --abbrev=0 | sed 's/^v//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "✅ Released version: $VERSION"
+      
       - name: Extract Release Notes
-        if: steps.check_tag.outputs.exists == 'false'
         id: release_notes
         run: |
           bash scripts/extract_release_notes.sh > release_notes.md
           echo "✅ Extracted release notes"
       
       - name: Create GitHub Release
-        if: steps.check_tag.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
+          tag_name: v${{ steps.release.outputs.version }}
           body_path: release_notes.md
           token: ${{ secrets.GITHUB_TOKEN }}
           make_latest: true
       
       - name: Sync master to dev
-        if: steps.check_tag.outputs.exists == 'false'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin dev
           git checkout dev
           git merge origin/master --no-edit
@@ -101,26 +77,18 @@ jobs:
       
       - name: Summary
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          TAG_EXISTS="${{ steps.check_tag.outputs.exists }}"
+          VERSION="${{ steps.release.outputs.version }}"
           
-          echo "## 🎉 Release Tag Processing" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎉 Release Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Version**: v$VERSION" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch**: ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
           echo "- **PR**: #${{ github.event.pull_request.number }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "$TAG_EXISTS" == "true" ]; then
-            echo "### ⚠️  Tag Already Exists" >> $GITHUB_STEP_SUMMARY
-            echo "Tag v$VERSION already exists, skipped creation." >> $GITHUB_STEP_SUMMARY
-          else
-            echo "### ✅ Release Complete" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**Completed Actions:**" >> $GITHUB_STEP_SUMMARY
-            echo "1. ✅ Created tag v$VERSION" >> $GITHUB_STEP_SUMMARY
-            echo "2. ✅ Created GitHub Release" >> $GITHUB_STEP_SUMMARY
-            echo "3. ✅ Synced master to dev" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**View Release:** https://github.com/${{ github.repository }}/releases/tag/v$VERSION" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "**Completed Actions:**" >> $GITHUB_STEP_SUMMARY
+          echo "1. ✅ Updated pyproject.toml, CHANGELOG.md, uv.lock" >> $GITHUB_STEP_SUMMARY
+          echo "2. ✅ Created commit and tag v$VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "3. ✅ Created GitHub Release" >> $GITHUB_STEP_SUMMARY
+          echo "4. ✅ Synced master to dev" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**View Release:** https://github.com/${{ github.repository }}/releases/tag/v$VERSION" >> $GITHUB_STEP_SUMMARY

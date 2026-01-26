@@ -5,23 +5,29 @@ set -euo pipefail
 VERSION="${1:-auto}"
 
 if [[ "$VERSION" == "auto" ]]; then
-    echo "Using automatic versioning (semantic-release)..."
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "🚀 Preparing Release (Automatic Versioning)"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     
+    echo "1. Running quality checks..."
     uv run poe lint
     uv run poe test
     uv run poe smoke
+    echo "   ✓ All checks passed"
     
-    semantic-release changelog
+    echo ""
+    echo "2. Calculating next version..."
+    NEXT_VERSION=$(uv run semantic-release version --print)
+    CURRENT_VERSION=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
     
-    NEXT_VERSION=$(semantic-release version --print)
-    if [[ "$NEXT_VERSION" == "$(cat pyproject.toml | grep '^version = ' | cut -d'"' -f2)" ]]; then
+    if [[ "$NEXT_VERSION" == "$CURRENT_VERSION" ]]; then
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "⚠️  No new version to release"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo ""
-        echo "Current version: $NEXT_VERSION"
+        echo "Current version: $CURRENT_VERSION"
         echo ""
         echo "Possible reasons:"
         echo "  - No feat/fix commits since last release"
@@ -33,28 +39,27 @@ if [[ "$VERSION" == "auto" ]]; then
         exit 1
     fi
     
-    update-toml update --path project.version --value "$NEXT_VERSION"
-    semantic-release version --no-push --no-tag --no-commit
-    
-    echo ""
-    echo "Committing changes..."
-    git add pyproject.toml CHANGELOG.md uv.lock
-    git commit -m "chore: release v$NEXT_VERSION"
+    echo "   ✓ Next version: $NEXT_VERSION"
     
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "✓ Release v$NEXT_VERSION prepared!"
+    echo "✓ Pre-release checks passed!"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     echo "Next steps:"
-    echo "  1. Review the changes:"
-    echo "     git show HEAD"
+    echo "  1. Create release branch:"
+    echo "     git checkout -b release/v$NEXT_VERSION"
     echo ""
     echo "  2. Push branch and create PR:"
     echo "     git push origin release/v$NEXT_VERSION"
     echo "     gh pr create --title \"chore: release v$NEXT_VERSION\" --base master"
     echo ""
-    echo "  3. After PR is merged, tag v$NEXT_VERSION will be created automatically"
+    echo "  3. After PR is merged, GitHub Actions will:"
+    echo "     - Run semantic-release version"
+    echo "     - Update pyproject.toml, CHANGELOG.md, uv.lock"
+    echo "     - Create tag v$NEXT_VERSION"
+    echo "     - Create GitHub Release"
+    echo "     - Sync master to dev"
     echo ""
 else
     if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -69,7 +74,9 @@ else
         exit 1
     fi
     
-    echo "Creating manual release: $TAG"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "🚀 Preparing Manual Release: $TAG"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     
     echo "1. Running quality checks..."
@@ -79,46 +86,29 @@ else
     echo "   ✓ All checks passed"
     
     echo ""
-    echo "2. Updating pyproject.toml version..."
-    update-toml update --path project.version --value "$VERSION"
-    echo "   ✓ Updated to $VERSION"
-    
-    echo ""
-    echo "3. Updating CHANGELOG.md..."
-    TODAY=$(date +%Y-%m-%d)
-    
-    TEMP_FILE=$(mktemp)
-    awk -v version="$VERSION" -v date="$TODAY" '
-    /^## Unreleased/ {
-        print $0
-        print ""
-        print ""
-        print "## v" version " (" date ")"
-        next
-    }
-    { print }
-    ' CHANGELOG.md > "$TEMP_FILE"
-    mv "$TEMP_FILE" CHANGELOG.md
-    echo "   ✓ Moved Unreleased to v$VERSION ($TODAY)"
-    
-    echo ""
-    echo "4. Committing changes..."
-    git add pyproject.toml CHANGELOG.md uv.lock
-    git commit -m "chore: release v$VERSION" || echo "   (no changes to commit)"
-    
-    echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "✓ Release v$VERSION prepared!"
+    echo "✓ Pre-release checks passed!"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     echo "Next steps:"
-    echo "  1. Review the changes:"
-    echo "     git show HEAD"
+    echo "  1. Create release branch:"
+    echo "     git checkout -b release/v$VERSION"
     echo ""
-    echo "  2. Push branch and create PR:"
+    echo "  2. Manually update files:"
+    echo "     - pyproject.toml (version = \"$VERSION\")"
+    echo "     - CHANGELOG.md (add release notes)"
+    echo ""
+    echo "  3. Commit changes:"
+    echo "     git add pyproject.toml CHANGELOG.md"
+    echo "     git commit -m \"chore: release v$VERSION\""
+    echo ""
+    echo "  4. Push branch and create PR:"
     echo "     git push origin release/v$VERSION"
     echo "     gh pr create --title \"chore: release v$VERSION\" --base master"
     echo ""
-    echo "  3. After PR is merged, tag v$VERSION will be created automatically"
+    echo "  5. After PR is merged, GitHub Actions will:"
+    echo "     - Create tag v$VERSION"
+    echo "     - Create GitHub Release"
+    echo "     - Sync master to dev"
     echo ""
 fi
