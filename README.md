@@ -133,21 +133,15 @@ Follow [Conventional Commits](https://www.conventionalcommits.org):
 ### Release Process
 
 ```bash
-# 1. Create release branch from master
-git checkout master
-git pull origin master
-git checkout -b release/v1.7.0
-
-# 2. Run tag command to prepare release
+# 1. Run tests and validate
 uv run poe tag
-# Or specify version manually:
-# uv run poe tag --version 1.7.0
-
 # This will:
-# - Calculate next version (if auto)
-# - Update pyproject.toml
-# - Update CHANGELOG.md
-# - Create commit
+# - Run lint/test/smoke checks
+# - Calculate next version
+# - Show next steps
+
+# 2. Create release branch
+git checkout -b release/v1.7.0
 
 # 3. Push branch and create PR
 git push origin release/v1.7.0
@@ -155,20 +149,22 @@ gh pr create --title "chore: release v1.7.0" --base master
 
 # 4. Merge PR
 # → GitHub Actions automatically:
-#    - Reads version from pyproject.toml
-#    - Creates tag on master
-#    - Triggers production deployment
-#    - Creates GitHub Release
+#    - Runs semantic-release version
+#    - Updates pyproject.toml, CHANGELOG.md, uv.lock
+#    - Creates commit and tag
+#    - Creates GitHub Release with detailed changelog
 #    - Syncs changes to dev
 ```
 
 **Key Points:**
-- ✅ Manual control - you decide when to release
-- ✅ Version calculated automatically (semantic-release)
-- ✅ Tags created on master after PR merge
-- ✅ All changes go through PR review
-- ✅ Can review and adjust CHANGELOG before release
-- ⚠️ Only keep one active release branch at a time (avoid version conflicts)
+- ✅ Simple local workflow - just run tests
+- ✅ Automatic version calculation from conventional commits
+- ✅ Automatic CHANGELOG generation with detailed commit history
+- ✅ All file modifications happen in CI (consistent and reliable)
+- ✅ Tags and releases created automatically after PR merge
+- ✅ Full audit trail with categorized changes (feat/fix/breaking)
+
+**See Also:** [Release Workflow Improvements](docs/en/release-workflow-improvements.md)
 
 ## 🛠️ Available Commands
 
