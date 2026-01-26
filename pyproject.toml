@@ -134,33 +134,28 @@ help = "Prepare a release (auto: uv run poe tag, manual: uv run poe tag --versio
 shell = "bash scripts/init.sh ${yes:+ -y}"
 args = [{ name = "yes", options = ["-y", "--yes"], type = "boolean" }]
 
-[semantic_release]
+[tool.semantic_release]
 assets = ["pyproject.toml", "uv.lock"]
 
-[semantic_release.changelog]
+[tool.semantic_release.changelog]
+mode = "init"
 exclude_commit_patterns = []
 
-[semantic_release.changelog.default_templates]
+[tool.semantic_release.changelog.default_templates]
 changelog_file = "CHANGELOG.md"
 output_format = "md"
 
-[semantic_release.changelog.environment]
-block_start_string = "{%"
-block_end_string = "%}"
-variable_start_string = "{{"
-variable_end_string = "}}"
-
-[semantic_release.branches.main]
+[tool.semantic_release.branches.main]
 match = "master"
 prerelease = false
 
-[semantic_release.branches.dev]
+[tool.semantic_release.branches.dev]
 match = "dev"
 prerelease = false
 
-[semantic_release.branches.release]
+[tool.semantic_release.branches.release]
 match = "release/.+"
 prerelease = false
 
-[semantic_release.remote]
+[tool.semantic_release.remote]
 ignore_token_for_push = true

@@ -1,32 +1,239 @@
 # CHANGELOG
 
 
-## Unreleased
+## v1.7.0 (2026-01-26)
+
+### Bug Fixes
+
+- Update semantic-release changelog config to v10 format
+  ([#32](https://github.com/jarlor/uv-python-repo-template/pull/32),
+  [`20e34f6`](https://github.com/jarlor/uv-python-repo-template/commit/20e34f67dc1f4050b8c3f93d2f788e79ed74fad6))
+
+### Documentation
+
+- Add AGENTS.md to .gitignore ([#31](https://github.com/jarlor/uv-python-repo-template/pull/31),
+  [`02c6825`](https://github.com/jarlor/uv-python-repo-template/commit/02c6825611a2a8283a86f5bc01192a2a96388368))
+
+- Reorganize documentation and add release workflow improvements
+  ([#31](https://github.com/jarlor/uv-python-repo-template/pull/31),
+  [`02c6825`](https://github.com/jarlor/uv-python-repo-template/commit/02c6825611a2a8283a86f5bc01192a2a96388368))
+
+- Reorganize documentation structure and improve release workflow details
+  ([#31](https://github.com/jarlor/uv-python-repo-template/pull/31),
+  [`02c6825`](https://github.com/jarlor/uv-python-repo-template/commit/02c6825611a2a8283a86f5bc01192a2a96388368))
+
+### Features
+
+- Enable semantic-release on dev branch
+  ([#31](https://github.com/jarlor/uv-python-repo-template/pull/31),
+  [`02c6825`](https://github.com/jarlor/uv-python-repo-template/commit/02c6825611a2a8283a86f5bc01192a2a96388368))
+
+- Enhance release workflow with semantic-release integration and improved tagging
+  ([#30](https://github.com/jarlor/uv-python-repo-template/pull/30),
+  [`9362c22`](https://github.com/jarlor/uv-python-repo-template/commit/9362c225ac25ab19f948fc872fd20a4cd3c6fef3))
+
+- Enhance release workflow with semantic-release integration and …
+  ([#30](https://github.com/jarlor/uv-python-repo-template/pull/30),
+  [`9362c22`](https://github.com/jarlor/uv-python-repo-template/commit/9362c225ac25ab19f948fc872fd20a4cd3c6fef3))
+
+- Implement fully automated release via GitHub Actions
+  ([#31](https://github.com/jarlor/uv-python-repo-template/pull/31),
+  [`02c6825`](https://github.com/jarlor/uv-python-repo-template/commit/02c6825611a2a8283a86f5bc01192a2a96388368))
+
+- Implement PR-first auto-tag workflow
+  ([#31](https://github.com/jarlor/uv-python-repo-template/pull/31),
+  [`02c6825`](https://github.com/jarlor/uv-python-repo-template/commit/02c6825611a2a8283a86f5bc01192a2a96388368))
+
+- Merge GitHub Release creation into release-on-pr workflow
+  ([#29](https://github.com/jarlor/uv-python-repo-template/pull/29),
+  [`15e3b04`](https://github.com/jarlor/uv-python-repo-template/commit/15e3b046ff45d83ddc9aadf04feced960c7953b6))
+
+### Refactoring
+
+- Enhance ruff and mypy configurations
+  ([#31](https://github.com/jarlor/uv-python-repo-template/pull/31),
+  [`02c6825`](https://github.com/jarlor/uv-python-repo-template/commit/02c6825611a2a8283a86f5bc01192a2a96388368))
 
 
 ## v1.6.0 (2026-01-25)
 
+### Bug Fixes
+
+- Handle semantic-release file updates correctly
+  ([#25](https://github.com/jarlor/uv-python-repo-template/pull/25),
+  [`1542536`](https://github.com/jarlor/uv-python-repo-template/commit/154253617e380cbcf2f719dd0cb92a200ca0fe19))
+
+- Improve prepare-tag workflow ([#22](https://github.com/jarlor/uv-python-repo-template/pull/22),
+  [`13bb450`](https://github.com/jarlor/uv-python-repo-template/commit/13bb450e72a17c0310c6f4d67c2ba923b1cdf799))
+
+- Include uv.lock in release commits to prevent pre-commit hook failure
+  ([#28](https://github.com/jarlor/uv-python-repo-template/pull/28),
+  [`1753cac`](https://github.com/jarlor/uv-python-repo-template/commit/1753cacc095db97c923e8128cf22addea4a01ca8))
+
+- Make semantic-release branch behavior explicit
+  ([#21](https://github.com/jarlor/uv-python-repo-template/pull/21),
+  [`64739ab`](https://github.com/jarlor/uv-python-repo-template/commit/64739abb35002db869b2bb7cca339160de7668ef))
+
+### Features
+
+- Add semantic-release support for release/* branches
+  ([#27](https://github.com/jarlor/uv-python-repo-template/pull/27),
+  [`24e61fd`](https://github.com/jarlor/uv-python-repo-template/commit/24e61fd638269d976b70b58c77e52938a4c29542))
+
+- Enable semantic-release on dev branch
+  ([#26](https://github.com/jarlor/uv-python-repo-template/pull/26),
+  [`3ce5f09`](https://github.com/jarlor/uv-python-repo-template/commit/3ce5f09c625c33a15fd71f81a7476cf1bd3e4918))
+
+- Enable semantic-release on dev branch
+  ([#25](https://github.com/jarlor/uv-python-repo-template/pull/25),
+  [`1542536`](https://github.com/jarlor/uv-python-repo-template/commit/154253617e380cbcf2f719dd0cb92a200ca0fe19))
+
+- Enable semantic-release on dev branch
+  ([#15](https://github.com/jarlor/uv-python-repo-template/pull/15),
+  [`cb29e30`](https://github.com/jarlor/uv-python-repo-template/commit/cb29e3081b9929d91efe85d8a3d8151516b4f4be))
+
+- Enable semantic-release on dev branch
+  ([#22](https://github.com/jarlor/uv-python-repo-template/pull/22),
+  [`13bb450`](https://github.com/jarlor/uv-python-repo-template/commit/13bb450e72a17c0310c6f4d67c2ba923b1cdf799))
+
+- Enable semantic-release on dev branch
+  ([#21](https://github.com/jarlor/uv-python-repo-template/pull/21),
+  [`64739ab`](https://github.com/jarlor/uv-python-repo-template/commit/64739abb35002db869b2bb7cca339160de7668ef))
+
+- Implement fully automated release via GitHub Actions
+  ([#26](https://github.com/jarlor/uv-python-repo-template/pull/26),
+  [`3ce5f09`](https://github.com/jarlor/uv-python-repo-template/commit/3ce5f09c625c33a15fd71f81a7476cf1bd3e4918))
+
+- Implement fully automated release via GitHub Actions
+  ([#25](https://github.com/jarlor/uv-python-repo-template/pull/25),
+  [`1542536`](https://github.com/jarlor/uv-python-repo-template/commit/154253617e380cbcf2f719dd0cb92a200ca0fe19))
+
+- Implement fully automated release via GitHub Actions
+  ([#15](https://github.com/jarlor/uv-python-repo-template/pull/15),
+  [`cb29e30`](https://github.com/jarlor/uv-python-repo-template/commit/cb29e3081b9929d91efe85d8a3d8151516b4f4be))
+
+- Implement manual release with auto-tag on PR merge
+  ([#26](https://github.com/jarlor/uv-python-repo-template/pull/26),
+  [`3ce5f09`](https://github.com/jarlor/uv-python-repo-template/commit/3ce5f09c625c33a15fd71f81a7476cf1bd3e4918))
+
+- Implement PR-first auto-tag workflow
+  ([#26](https://github.com/jarlor/uv-python-repo-template/pull/26),
+  [`3ce5f09`](https://github.com/jarlor/uv-python-repo-template/commit/3ce5f09c625c33a15fd71f81a7476cf1bd3e4918))
+
+- Implement PR-first auto-tag workflow
+  ([#25](https://github.com/jarlor/uv-python-repo-template/pull/25),
+  [`1542536`](https://github.com/jarlor/uv-python-repo-template/commit/154253617e380cbcf2f719dd0cb92a200ca0fe19))
+
+- Implement PR-first auto-tag workflow
+  ([#15](https://github.com/jarlor/uv-python-repo-template/pull/15),
+  [`cb29e30`](https://github.com/jarlor/uv-python-repo-template/commit/cb29e3081b9929d91efe85d8a3d8151516b4f4be))
+
+- Implement PR-first auto-tag workflow
+  ([#22](https://github.com/jarlor/uv-python-repo-template/pull/22),
+  [`13bb450`](https://github.com/jarlor/uv-python-repo-template/commit/13bb450e72a17c0310c6f4d67c2ba923b1cdf799))
+
+- Implement PR-first auto-tag workflow
+  ([#21](https://github.com/jarlor/uv-python-repo-template/pull/21),
+  [`64739ab`](https://github.com/jarlor/uv-python-repo-template/commit/64739abb35002db869b2bb7cca339160de7668ef))
+
+- Implement PR-first auto-tag workflow
+  ([#19](https://github.com/jarlor/uv-python-repo-template/pull/19),
+  [`1250386`](https://github.com/jarlor/uv-python-repo-template/commit/1250386b140c0e80f39cc41a47d06fa326348970))
+
+- Introduce PR-first automated release and tagging workflow
+  ([#19](https://github.com/jarlor/uv-python-repo-template/pull/19),
+  [`1250386`](https://github.com/jarlor/uv-python-repo-template/commit/1250386b140c0e80f39cc41a47d06fa326348970))
+
+### Refactoring
+
+- Enhance ruff and mypy configurations
+  ([#26](https://github.com/jarlor/uv-python-repo-template/pull/26),
+  [`3ce5f09`](https://github.com/jarlor/uv-python-repo-template/commit/3ce5f09c625c33a15fd71f81a7476cf1bd3e4918))
+
+- Enhance ruff and mypy configurations
+  ([#25](https://github.com/jarlor/uv-python-repo-template/pull/25),
+  [`1542536`](https://github.com/jarlor/uv-python-repo-template/commit/154253617e380cbcf2f719dd0cb92a200ca0fe19))
+
+- Enhance ruff and mypy configurations
+  ([#15](https://github.com/jarlor/uv-python-repo-template/pull/15),
+  [`cb29e30`](https://github.com/jarlor/uv-python-repo-template/commit/cb29e3081b9929d91efe85d8a3d8151516b4f4be))
+
+- Enhance ruff and mypy configurations
+  ([#22](https://github.com/jarlor/uv-python-repo-template/pull/22),
+  [`13bb450`](https://github.com/jarlor/uv-python-repo-template/commit/13bb450e72a17c0310c6f4d67c2ba923b1cdf799))
+
+- Enhance ruff and mypy configurations
+  ([#21](https://github.com/jarlor/uv-python-repo-template/pull/21),
+  [`64739ab`](https://github.com/jarlor/uv-python-repo-template/commit/64739abb35002db869b2bb7cca339160de7668ef))
+
+- Enhance ruff and mypy configurations
+  ([#19](https://github.com/jarlor/uv-python-repo-template/pull/19),
+  [`1250386`](https://github.com/jarlor/uv-python-repo-template/commit/1250386b140c0e80f39cc41a47d06fa326348970))
+
 
 ## v1.5.1 (2026-01-25)
+
+### Bug Fixes
+
+- Adjust relative paths in some documents
+  ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10),
+  [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
 
 ### Chores
 
 - Release v1.5.0 ([#14](https://github.com/jarlor/uv-python-repo-template/pull/14),
   [`3c8b3d7`](https://github.com/jarlor/uv-python-repo-template/commit/3c8b3d7d0996f7cf6458bc9ce947f843b0704e0e))
 
-1.5.0
+- Release v1.5.1 ([#17](https://github.com/jarlor/uv-python-repo-template/pull/17),
+  [`c43eef5`](https://github.com/jarlor/uv-python-repo-template/commit/c43eef54c7c10cf4f2035e2ed2a3843c6fbe139b))
+
+- Update CHANGELOG and bump version to 1.5.1
+  ([#17](https://github.com/jarlor/uv-python-repo-template/pull/17),
+  [`c43eef5`](https://github.com/jarlor/uv-python-repo-template/commit/c43eef54c7c10cf4f2035e2ed2a3843c6fbe139b))
 
 ### Documentation
+
+- Add Chinese versions of all documentation
+  ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10),
+  [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
+
+- Add Chinese versions of getting-started and github-setup
+  ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10),
+  [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
 
 - Manually update CHANGELOG for PR #10 and #11
   ([#12](https://github.com/jarlor/uv-python-repo-template/pull/12),
   [`85b2cef`](https://github.com/jarlor/uv-python-repo-template/commit/85b2cefe829ba30d823a4c8cccf9ccdcc8c078a5))
 
-Add missing changelog entries for: - feat: pre-push hook for dev branch protection (#11) - docs:
-  comprehensive documentation restructure (#10)
+- Remove AWS ECS specific references, use generic deployment examples
+  ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10),
+  [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
 
-These PRs were merged with non-conventional commit titles, so semantic-release didn't pick them up
-  automatically.
+- Restructure documentation with comprehensive guides
+  ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10),
+  [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
+
+- Simplify secrets checklist to reflect no deployment configured
+  ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10),
+  [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
+
+- Update branch protection strategy documentation
+  ([#11](https://github.com/jarlor/uv-python-repo-template/pull/11),
+  [`9b32c32`](https://github.com/jarlor/uv-python-repo-template/commit/9b32c3277ece0f556f346cb4a4ebc27226823e59))
+
+- Update workflow links to use relative paths
+  ([#10](https://github.com/jarlor/uv-python-repo-template/pull/10),
+  [`54d8eb9`](https://github.com/jarlor/uv-python-repo-template/commit/54d8eb962df8723b3d18f40a538d1f0b7d91d3b7))
+
+### Features
+
+- Add manual version tagging support
+  ([#13](https://github.com/jarlor/uv-python-repo-template/pull/13),
+  [`d3dbfce`](https://github.com/jarlor/uv-python-repo-template/commit/d3dbfce863d9875e8f5407d335f2e3f246e5c7c1))
+
+- Add pre-push hook to block direct push to dev branch
+  ([#11](https://github.com/jarlor/uv-python-repo-template/pull/11),
+  [`9b32c32`](https://github.com/jarlor/uv-python-repo-template/commit/9b32c3277ece0f556f346cb4a4ebc27226823e59))
 
 ### Refactoring
 
@@ -34,29 +241,9 @@ These PRs were merged with non-conventional commit titles, so semantic-release d
   ([#16](https://github.com/jarlor/uv-python-repo-template/pull/16),
   [`8a6c621`](https://github.com/jarlor/uv-python-repo-template/commit/8a6c6211407215b7ef1e3409f497fd2d95ee64a2))
 
-- Remove unused [project.scripts] section - Add comprehensive ruff lint rules (E, W, F, I, N, UP, B,
-  C4, SIM, RET, ARG, PTH, ERA, PL, PERF) - Enable mypy strict mode with full type checking - Add
-  type annotations to all functions (src and tests) - Update AGENTS.md with detailed linting and
-  type checking guidelines
-
 - Merge tag and tag-manual into unified command
   ([#13](https://github.com/jarlor/uv-python-repo-template/pull/13),
   [`d3dbfce`](https://github.com/jarlor/uv-python-repo-template/commit/d3dbfce863d9875e8f5407d335f2e3f246e5c7c1))
-
-* feat: add manual version tagging support
-
-- Add scripts/manual_tag.sh for manual version creation - Add 'uv run poe tag-manual --version
-  X.Y.Z' command - Automatically updates pyproject.toml and CHANGELOG.md - Creates git tag with
-  specified version - Update README with manual tagging instructions
-
-Use cases: - When semantic-release refuses to create new version - When only documentation changes
-  were made - When specific version number is needed
-
-* refactor: merge tag and tag-manual into unified command
-
-- Replace separate tag/tag-manual with single 'tag' command - Auto mode: uv run poe tag (default,
-  uses semantic-release) - Manual mode: uv run poe tag --version X.Y.Z - Simplifies user experience
-  with single command - Includes quality checks in both modes
 
 
 ## v1.4.0 (2026-01-25)
@@ -439,12 +626,4 @@ Use cases: - When semantic-release refuses to create new version - When only doc
 
 ## v0.1.0 (2025-04-01)
 
-### Features
-
-- Add python-semantic-release
-  ([`a3e0b60`](https://github.com/jarlor/uv-python-repo-template/commit/a3e0b60189f1da97a2b517a3c4344a06b00df4bb))
-
-### Refactoring
-
-- Adjust init_linux.sh
-  ([`0d6eb30`](https://github.com/jarlor/uv-python-repo-template/commit/0d6eb30d2b508c4ecad429da892eb8ab173cae7a))
+- Initial Release
