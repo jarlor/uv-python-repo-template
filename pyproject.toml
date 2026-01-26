@@ -138,8 +138,11 @@ args = [{ name = "yes", options = ["-y", "--yes"], type = "boolean" }]
 assets = ["pyproject.toml", "uv.lock"]
 
 [semantic_release.changelog]
-changelog_file = "CHANGELOG.md"
 exclude_commit_patterns = []
+
+[semantic_release.changelog.default_templates]
+changelog_file = "CHANGELOG.md"
+output_format = "md"
 
 [semantic_release.changelog.environment]
 block_start_string = "{%"
