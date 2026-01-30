@@ -63,8 +63,8 @@ Run the initialization script:
 uv run poe init -y
 ```
 
-Need a clean slate? Add `--reset-template` to also wipe the template `CHANGELOG.md` and reset
-`pyproject.toml`'s version to `0.1.0`.
+By default this command also wipes the template `CHANGELOG.md` and resets `pyproject.toml`
+to version `0.1.0`. Pass `--no-reset` if you want to keep the template history intact.
 
 ### What This Does
 
