@@ -72,7 +72,7 @@ uv run poe init -y
 
 1. **重命名项目** 以匹配你的目录名
    - 重写 `pyproject.toml` 元数据
-   - 重命名 `src/uv_python_repo_template` 为 `src/YOUR_PROJECT_NAME`（若缺少 `__init__.py` 会自动补齐）
+   - 将包名规范化为全小写下划线并重命名 `src/uv_python_repo_template`（若缺少 `__init__.py` 会自动补齐）
 
 2. **设置 Git 分支**
    - 重命名 `main` → `master`（如果存在）

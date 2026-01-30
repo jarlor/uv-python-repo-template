@@ -18,8 +18,18 @@ for arg in "$@"; do
     esac
 done
 
-dir_name=$(basename "$PWD")
-dir_name=${dir_name//-/_}
+raw_dir_name=$(basename "$PWD")
+dir_name=$(printf "%s" "$raw_dir_name" | tr '[:upper:]' '[:lower:]')
+dir_name=${dir_name//[^a-z0-9_]/_}
+dir_name=$(printf "%s" "$dir_name" | sed 's/_\+/_/g; s/^_//; s/_$//')
+
+if [[ -z "$dir_name" ]]; then
+    dir_name="app"
+fi
+
+if [[ "$dir_name" =~ ^[0-9] ]]; then
+    dir_name="pkg_$dir_name"
+fi
 
 if [[ "$dir_name" == "uv_python_repo_template" && "$force_run" != "true" ]]; then
     echo "Refusing to run: project directory name still template default ('$dir_name')" >&2
@@ -78,7 +88,14 @@ EOF
         echo "Warning: CHANGELOG.md not found, skipping reset" >&2
     fi
 
-    sed -i.bak '0,/^version = "[^"]*"/s//version = "0.1.0"/' pyproject.toml && rm pyproject.toml.bak
+    if command -v uv >/dev/null 2>&1; then
+        uv run update-toml update --path project.version --value "0.1.0"
+    elif command -v update-toml >/dev/null 2>&1; then
+        update-toml update --path project.version --value "0.1.0"
+    else
+        echo "Error: update-toml command not found; install via uv or pip" >&2
+        exit 1
+    fi
     echo "✓ Reset pyproject.toml version to 0.1.0"
 fi
 

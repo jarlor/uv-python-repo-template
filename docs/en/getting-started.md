@@ -72,7 +72,7 @@ The `init` script performs the following actions:
 
 1. **Renames the project** to match your directory name
    - Rewrites `pyproject.toml` metadata
-   - Renames `src/uv_python_repo_template` to `src/YOUR_PROJECT_NAME` (adds `__init__.py` if missing)
+   - Normalizes the package name to lowercase snake_case and renames `src/uv_python_repo_template` accordingly (adds `__init__.py` if missing)
 
 2. **Sets up Git branches**
    - Renames `main` → `master` (if exists)
