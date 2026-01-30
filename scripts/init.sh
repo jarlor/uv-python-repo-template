@@ -3,14 +3,17 @@
 set -euo pipefail
 
 force_run=false
-reset_template=false
+reset_template=true
 for arg in "$@"; do
     case "$arg" in
         -y|--yes)
             force_run=true
             ;;
-        --reset-template)
+        --reset|--reset-template|-r)
             reset_template=true
+            ;;
+        --no-reset)
+            reset_template=false
             ;;
     esac
 done

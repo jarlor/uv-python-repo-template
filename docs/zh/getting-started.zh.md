@@ -63,8 +63,8 @@ git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
 uv run poe init -y
 ```
 
-如果想彻底清掉模板留下的痕迹，可以在命令后追加 `--reset-template`，这会重写
-`CHANGELOG.md` 并把 `pyproject.toml` 的版本号重置为 `0.1.0`。
+默认情况下该命令会重写 `CHANGELOG.md` 并把 `pyproject.toml` 版本重置为 `0.1.0`。
+若想保留模板历史，可追加 `--no-reset`。
 
 ### 这会做什么
 
