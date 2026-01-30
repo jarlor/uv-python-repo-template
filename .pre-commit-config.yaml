@@ -15,7 +15,7 @@ repos:
 
       - id: lint-ruff
         name: Lint (ruff)
-        entry: uv run poe lint_ruff
+        entry: uv run poe lint-ruff
         language: system
         pass_filenames: false
         types: [python]
@@ -27,7 +27,7 @@ repos:
 
       - id: lint-mypy
         name: Lint (mypy)
-        entry: uv run poe lint_mypy
+        entry: uv run poe lint-mypy
         language: system
         pass_filenames: false
         types: [python]
