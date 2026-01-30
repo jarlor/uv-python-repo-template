@@ -3,16 +3,11 @@
 set -euo pipefail
 
 force_run=false
-reset_template=false
 for arg in "$@"; do
-    case "$arg" in
-        -y|--yes)
-            force_run=true
-            ;;
-        --reset-template)
-            reset_template=true
-            ;;
-    esac
+    if [[ "$arg" == "-y" ]]; then
+        force_run=true
+        break
+    fi
 done
 
 dir_name=$(basename "$PWD")
@@ -60,23 +55,6 @@ fi
 
 if [[ -d "$src_new" ]] && [[ ! -f "$src_new/__init__.py" ]]; then
     touch "$src_new/__init__.py"
-fi
-
-if [[ "$reset_template" == "true" ]]; then
-    if [[ -f "CHANGELOG.md" ]]; then
-        cat <<'EOF' > CHANGELOG.md
-# Changelog
-
-## [Unreleased]
-- Initial release after resetting template metadata
-EOF
-        echo "✓ Reset CHANGELOG.md"
-    else
-        echo "Warning: CHANGELOG.md not found, skipping reset" >&2
-    fi
-
-    sed -i.bak '0,/^version = "[^"]*"/s//version = "0.1.0"/' pyproject.toml && rm pyproject.toml.bak
-    echo "✓ Reset pyproject.toml version to 0.1.0"
 fi
 
 if git rev-parse --git-dir > /dev/null 2>&1; then
@@ -150,9 +128,6 @@ EOF
 git add pyproject.toml
 if [[ -d "$src_new" ]]; then
     git add "$src_new"
-fi
-if [[ "$reset_template" == "true" && -f "CHANGELOG.md" ]]; then
-    git add CHANGELOG.md
 fi
 
 if git diff --cached --quiet; then
