@@ -1,12 +1,8 @@
-from typing import Union
+from __future__ import annotations
 
 import pytest
 
-
-def add_numbers(a: Union[int, float], b: Union[int, float]) -> Union[int, float]:
-    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
-        raise TypeError("Inputs must be integers or floats")
-    return a + b
+from uv_python_repo_template import add_numbers, main
 
 
 @pytest.mark.parametrize(
@@ -18,12 +14,16 @@ def add_numbers(a: Union[int, float], b: Union[int, float]) -> Union[int, float]
         (0, 0, 0),
     ],
 )
-def test_add_numbers(
-    a: Union[int, float], b: Union[int, float], expected: Union[int, float]
-) -> None:
+def test_add_numbers(a: float, b: float, expected: float) -> None:
     assert add_numbers(a, b) == expected
 
 
 def test_add_numbers_type_error() -> None:
     with pytest.raises(TypeError):
         add_numbers("1", 2)  # type: ignore[arg-type]
+
+
+def test_main_prints_demo_sum(capsys: pytest.CaptureFixture[str]) -> None:
+    main()
+    captured = capsys.readouterr()
+    assert "2 + 3 = 5" in captured.out

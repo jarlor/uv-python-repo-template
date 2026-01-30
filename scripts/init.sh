@@ -3,11 +3,16 @@
 set -euo pipefail
 
 force_run=false
+reset_template=false
 for arg in "$@"; do
-    if [[ "$arg" == "-y" ]]; then
-        force_run=true
-        break
-    fi
+    case "$arg" in
+        -y|--yes)
+            force_run=true
+            ;;
+        --reset-template)
+            reset_template=true
+            ;;
+    esac
 done
 
 dir_name=$(basename "$PWD")
@@ -40,14 +45,38 @@ fi
 
 sed -i.bak "s/uv_python_repo_template/$escaped_dir_name/g" pyproject.toml && rm pyproject.toml.bak
 
+echo "✓ Updated pyproject.toml to use package '$dir_name'"
+
 src_old="src/uv_python_repo_template"
 src_new="src/$dir_name"
 if [[ "$src_old" == "$src_new" ]]; then
     echo "Project package directory already matches '$src_new', skipping renaming"
 elif [[ -d "$src_old" ]]; then
     mv "$src_old" "$src_new"
+    echo "✓ Renamed package directory to '$src_new'"
 else
     echo "Warning: '$src_old' directory not found, skipping renaming" >&2
+fi
+
+if [[ -d "$src_new" ]] && [[ ! -f "$src_new/__init__.py" ]]; then
+    touch "$src_new/__init__.py"
+fi
+
+if [[ "$reset_template" == "true" ]]; then
+    if [[ -f "CHANGELOG.md" ]]; then
+        cat <<'EOF' > CHANGELOG.md
+# Changelog
+
+## [Unreleased]
+- Initial release after resetting template metadata
+EOF
+        echo "✓ Reset CHANGELOG.md"
+    else
+        echo "Warning: CHANGELOG.md not found, skipping reset" >&2
+    fi
+
+    sed -i.bak '0,/^version = "[^"]*"/s//version = "0.1.0"/' pyproject.toml && rm pyproject.toml.bak
+    echo "✓ Reset pyproject.toml version to 0.1.0"
 fi
 
 if git rev-parse --git-dir > /dev/null 2>&1; then
@@ -122,6 +151,9 @@ git add pyproject.toml
 if [[ -d "$src_new" ]]; then
     git add "$src_new"
 fi
+if [[ "$reset_template" == "true" && -f "CHANGELOG.md" ]]; then
+    git add CHANGELOG.md
+fi
 
 if git diff --cached --quiet; then
     echo "No changes to commit"
@@ -135,4 +167,11 @@ if [[ -f "scripts/pre-push.sh" ]]; then
     cp scripts/pre-push.sh .git/hooks/pre-push
     chmod +x .git/hooks/pre-push
     echo "✓ Pre-push hook installed (blocks direct push to dev branch)"
+fi
+
+if command -v uv >/dev/null 2>&1; then
+    echo "Running uv sync to refresh dependencies..."
+    uv sync
+else
+    echo "Warning: 'uv' command not found; skipping uv sync" >&2
 fi
