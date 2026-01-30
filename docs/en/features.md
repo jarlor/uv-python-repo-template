@@ -160,14 +160,14 @@ repos:
 
       - id: lint-ruff
         name: Lint (ruff)
-        entry: uv run poe lint_ruff
+        entry: uv run poe lint-ruff
         language: system
         types: [python]
         stages: [pre-commit]
 
       - id: lint-mypy
         name: Lint (mypy)
-        entry: uv run poe lint_mypy
+        entry: uv run poe lint-mypy
         language: system
         types: [python]
         stages: [pre-commit]
@@ -389,8 +389,8 @@ Structured PR descriptions with checklists.
 ```bash
 # Code quality
 uv run poe format          # Format code with Ruff
-uv run poe lint_ruff       # Lint with Ruff
-uv run poe lint_mypy       # Type check with mypy
+uv run poe lint-ruff       # Lint with Ruff
+uv run poe lint-mypy       # Type check with mypy
 uv run poe lint            # Run all linters
 
 # Testing
@@ -411,9 +411,9 @@ Defined in `pyproject.toml`:
 ```toml
 [tool.poe.tasks]
 format = "ruff format"
-lint_ruff = "ruff check src/"
-lint_mypy = "mypy --install-types --non-interactive"
-lint = { sequence = ["lint_ruff", "lint_mypy"] }
+lint-ruff = "ruff check --fix src/"
+lint-mypy = "mypy --install-types --non-interactive"
+lint = { sequence = ["lint-ruff", "lint-mypy"] }
 test = "pytest"
 smoke = { shell = "python -c 'import uv_python_repo_template as p; p.main()'" }
 tag = { sequence = ["lint", "test", "smoke", "_tag_changelog", "_tag_update_toml_version", "_tag_version"] }
