@@ -40,14 +40,21 @@ fi
 
 sed -i.bak "s/uv_python_repo_template/$escaped_dir_name/g" pyproject.toml && rm pyproject.toml.bak
 
+echo "✓ Updated pyproject.toml to use package '$dir_name'"
+
 src_old="src/uv_python_repo_template"
 src_new="src/$dir_name"
 if [[ "$src_old" == "$src_new" ]]; then
     echo "Project package directory already matches '$src_new', skipping renaming"
 elif [[ -d "$src_old" ]]; then
     mv "$src_old" "$src_new"
+    echo "✓ Renamed package directory to '$src_new'"
 else
     echo "Warning: '$src_old' directory not found, skipping renaming" >&2
+fi
+
+if [[ -d "$src_new" ]] && [[ ! -f "$src_new/__init__.py" ]]; then
+    touch "$src_new/__init__.py"
 fi
 
 if git rev-parse --git-dir > /dev/null 2>&1; then
@@ -135,4 +142,11 @@ if [[ -f "scripts/pre-push.sh" ]]; then
     cp scripts/pre-push.sh .git/hooks/pre-push
     chmod +x .git/hooks/pre-push
     echo "✓ Pre-push hook installed (blocks direct push to dev branch)"
+fi
+
+if command -v uv >/dev/null 2>&1; then
+    echo "Running uv sync to refresh dependencies..."
+    uv sync
+else
+    echo "Warning: 'uv' command not found; skipping uv sync" >&2
 fi
