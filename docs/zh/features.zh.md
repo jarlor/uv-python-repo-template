@@ -267,8 +267,8 @@ dev:    A → B → C → D (自动同步)
 ```bash
 # 代码质量
 uv run poe format          # 使用 Ruff 格式化代码
-uv run poe lint_ruff       # 使用 Ruff lint
-uv run poe lint_mypy       # 使用 mypy 类型检查
+uv run poe lint-ruff       # 使用 Ruff lint
+uv run poe lint-mypy       # 使用 mypy 类型检查
 uv run poe lint            # 运行所有 linters
 
 # 测试
@@ -289,9 +289,9 @@ uv run poe init -y         # 初始化项目
 ```toml
 [tool.poe.tasks]
 format = "ruff format"
-lint_ruff = "ruff check src/"
-lint_mypy = "mypy --install-types --non-interactive"
-lint = { sequence = ["lint_ruff", "lint_mypy"] }
+lint-ruff = "ruff check --fix src/"
+lint-mypy = "mypy --install-types --non-interactive"
+lint = { sequence = ["lint-ruff", "lint-mypy"] }
 test = "pytest"
 ```
 

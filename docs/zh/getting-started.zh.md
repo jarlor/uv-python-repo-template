@@ -63,13 +63,16 @@ git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
 uv run poe init -y
 ```
 
+如果想彻底清掉模板留下的痕迹，可以在命令后追加 `--reset-template`，这会重写
+`CHANGELOG.md` 并把 `pyproject.toml` 的版本号重置为 `0.1.0`。
+
 ### 这会做什么
 
 `init` 脚本执行以下操作：
 
 1. **重命名项目** 以匹配你的目录名
-   - 更新 `pyproject.toml`
-   - 重命名 `src/uv_python_repo_template` 为 `src/YOUR_PROJECT_NAME`
+   - 重写 `pyproject.toml` 元数据
+   - 重命名 `src/uv_python_repo_template` 为 `src/YOUR_PROJECT_NAME`（若缺少 `__init__.py` 会自动补齐）
 
 2. **设置 Git 分支**
    - 重命名 `main` → `master`（如果存在）
@@ -84,6 +87,8 @@ uv run poe init -y
    - 需要配置的 GitHub 设置
    - Workflow 待办事项
    - 必需的 secrets
+
+5. **运行 `uv sync`**，确保虚拟环境与锁定文件匹配重命名后的包
 
 ### 初始化后检查清单
 

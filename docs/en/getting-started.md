@@ -63,13 +63,16 @@ Run the initialization script:
 uv run poe init -y
 ```
 
+Need a clean slate? Add `--reset-template` to also wipe the template `CHANGELOG.md` and reset
+`pyproject.toml`'s version to `0.1.0`.
+
 ### What This Does
 
 The `init` script performs the following actions:
 
 1. **Renames the project** to match your directory name
-   - Updates `pyproject.toml`
-   - Renames `src/uv_python_repo_template` to `src/YOUR_PROJECT_NAME`
+   - Rewrites `pyproject.toml` metadata
+   - Renames `src/uv_python_repo_template` to `src/YOUR_PROJECT_NAME` (adds `__init__.py` if missing)
 
 2. **Sets up Git branches**
    - Renames `main` → `master` (if exists)
@@ -84,6 +87,8 @@ The `init` script performs the following actions:
    - GitHub settings to configure
    - Workflow TODOs
    - Required secrets
+
+5. **Runs `uv sync`** so the virtual environment and lock files align with the freshly renamed package
 
 ### Post-Init Checklist
 
