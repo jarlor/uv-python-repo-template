@@ -47,7 +47,7 @@ fi
 if [[ "$force_run" != "true" ]]; then
     cat <<'EOF'
 This init will:
-- Rename branch main -> master (if present)
+- Keep or create a main branch
 - Create dev branch (if missing)
 - Create an initialization commit
 
@@ -101,16 +101,16 @@ fi
 
 if git rev-parse --git-dir > /dev/null 2>&1; then
     current_branch=$(git rev-parse --abbrev-ref HEAD)
-    if [[ "$current_branch" == "main" ]]; then
-        git branch -m master
-        current_branch="master"
+
+    if ! git show-ref --verify --quiet refs/heads/main; then
+        git branch main
     fi
 
     if ! git show-ref --verify --quiet refs/heads/dev; then
         git branch dev
     fi
 
-    if [[ "$current_branch" == "master" ]]; then
+    if [[ "$current_branch" == "main" ]]; then
         git checkout dev
     fi
 else
@@ -118,17 +118,17 @@ else
 fi
 
 if [[ -d ".github/workflows" ]]; then
-    if [[ ! -f ".github/workflows/pr_gate.yaml" ]]; then
-        echo "Warning: .github/workflows/pr_gate.yaml is missing" >&2
+    if [[ ! -f ".github/workflows/ci.yml" ]]; then
+        echo "Warning: .github/workflows/ci.yml is missing" >&2
     fi
-    if [[ ! -f ".github/workflows/dev_deploy.yaml" ]]; then
-        echo "Warning: .github/workflows/dev_deploy.yaml is missing" >&2
+    if [[ ! -f ".github/workflows/pr-governance.yml" ]]; then
+        echo "Warning: .github/workflows/pr-governance.yml is missing" >&2
     fi
-    if [[ ! -f ".github/workflows/prod_deploy.yaml" ]]; then
-        echo "Warning: .github/workflows/prod_deploy.yaml is missing" >&2
+    if [[ ! -f ".github/workflows/commit-governance.yml" ]]; then
+        echo "Warning: .github/workflows/commit-governance.yml is missing" >&2
     fi
-    if [[ ! -f ".github/workflows/release.yaml" ]]; then
-        echo "Warning: .github/workflows/release.yaml is missing" >&2
+    if [[ ! -f ".github/workflows/release.yml" ]]; then
+        echo "Warning: .github/workflows/release.yml is missing" >&2
     fi
 fi
 
@@ -145,24 +145,22 @@ cat <<'EOF'
 📋 POST-INIT CHECKLIST
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🔧 WORKFLOW IMPLEMENTATION
-  ☐ Implement smoke test in .github/workflows/pr_gate.yaml
-  ☐ Implement deploy steps in .github/workflows/dev_deploy.yaml
-  ☐ Implement deploy steps in .github/workflows/prod_deploy.yaml
+🔧 WORKFLOW PROFILES
+  ☐ Keep CI-only mode by leaving TEST_DEPLOY_ENABLED and PROD_DEPLOY_ENABLED unset
+  ☐ Enable prod deploy only when production secrets and vars are configured
+  ☐ Enable test deploy only when a separate test/staging server exists
 
 🔒 GITHUB BRANCH PROTECTION (Settings → Branches)
-  ☐ Protect 'dev' and 'master' branches
+  ☐ Protect 'dev' and 'main' branches
   ☐ Require pull request reviews before merge
-  ☐ Require status checks to pass: "PR Gate"
-  ☐ Restrict direct pushes to dev/master
+  ☐ Require status checks to pass: "CI" and governance checks
+  ☐ Restrict direct pushes to dev/main
 
 🔑 GITHUB SECRETS (Settings → Secrets and variables → Actions)
-  ⚠️  Currently no deployment workflows configured
-  ☐ Configure secrets when you implement deployment in:
-     - .github/workflows/dev_deploy.yaml
-     - .github/workflows/prod_deploy.yaml
+  ☐ Optional test deploy: TEST_DEPLOY_ENABLED=true plus TEST_* secrets/vars
+  ☐ Optional prod deploy: PROD_DEPLOY_ENABLED=true plus PROD_* secrets/vars
   
-  See docs/github-setup.md for common deployment secret examples
+  See docs/en/github-setup.md for common deployment secret examples
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
@@ -186,7 +184,7 @@ pre-commit install --hook-type pre-commit --hook-type commit-msg
 if [[ -f "scripts/pre-push.sh" ]]; then
     cp scripts/pre-push.sh .git/hooks/pre-push
     chmod +x .git/hooks/pre-push
-    echo "✓ Pre-push hook installed (blocks direct push to dev branch)"
+    echo "✓ Pre-push hook installed (blocks direct push to dev/main branches)"
 fi
 
 if command -v uv >/dev/null 2>&1; then

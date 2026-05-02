@@ -1,0 +1,23 @@
+name: Commit Governance
+
+on:
+  push:
+    branches: [dev, main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate pushed commit messages
+        env:
+          TARGET_BRANCH: ${{ github.ref_name }}
+          COMMIT_RANGE: ${{ github.event.before }}..${{ github.sha }}
+        run: bash scripts/cicd/validate_commit_messages.sh
