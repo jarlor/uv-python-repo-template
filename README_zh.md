@@ -82,6 +82,8 @@ CI 和 Git 治理默认启用。部署能力通过 GitHub Variables 显式开启
 | 测试 | `TEST_SSH_HOST`, `TEST_SSH_USER`, `TEST_SSH_KEY` | `TEST_DEPLOY_ENABLED`, `TEST_DEPLOY_PATH`, `TEST_SYSTEMD_SERVICE`, `TEST_HEALTH_URL`, `TEST_REPOSITORY_URL` |
 | 生产 | `PROD_SSH_HOST`, `PROD_SSH_USER`, `PROD_SSH_KEY` | `PROD_DEPLOY_ENABLED`, `PROD_DEPLOY_PATH`, `PROD_SYSTEMD_SERVICE`, `PROD_HEALTH_URL`, `PROD_REPOSITORY_URL` |
 
+semantic-release 也需要显式启用。仓库规则允许某个 token 向 `main` 推 release commit 和 tag 后，设置 `RELEASE_ENABLED=true` 并提供 `RELEASE_TOKEN`。
+
 ## Workflows
 
 - `ci.yml`：Python 检查、可选前端构建、shell 语法检查

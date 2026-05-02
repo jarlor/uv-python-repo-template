@@ -52,3 +52,10 @@ GitHub Actions workflow permissions 设置为 read/write，让 release 和 backm
 - Variable: `PROD_REPOSITORY_URL`
 
 项目没有测试服务器时，不设置 `TEST_DEPLOY_ENABLED`。只想发 tag 和 GitHub Release、不部署主机时，不设置 `PROD_DEPLOY_ENABLED`。
+
+semantic-release：
+
+- Secret: `RELEASE_TOKEN`
+- Variable: `RELEASE_ENABLED`
+
+`RELEASE_TOKEN` 必须被仓库 ruleset 允许向 `main` 推 release commit 和 tag。在 bypass 或权限模型配置好之前，不要设置 `RELEASE_ENABLED`。
