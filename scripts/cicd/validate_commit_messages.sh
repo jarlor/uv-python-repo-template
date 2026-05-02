@@ -8,6 +8,10 @@ conventional_regex='^(feat|fix|perf|docs|refactor|test|chore|ci|build|style|reve
 main_release_regex='^(feat|fix|perf)(\([A-Za-z0-9._/-]+\))?!?: .+'
 main_allowed_chore_regex='^chore\((release|backmerge)\): .+'
 
+if [[ "$COMMIT_RANGE" =~ ^0{40}\.\. ]]; then
+  COMMIT_RANGE="${COMMIT_RANGE#*..}^..${COMMIT_RANGE#*..}"
+fi
+
 if ! commits="$(git rev-list --first-parent --reverse "$COMMIT_RANGE" 2>/dev/null)"; then
   echo "Invalid COMMIT_RANGE: $COMMIT_RANGE" >&2
   exit 1
