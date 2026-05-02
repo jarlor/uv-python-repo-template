@@ -118,11 +118,13 @@ addopts = "--verbose --color=yes"
 format = { cmd = "ruff format", help = "Format code with Ruff" }
 format-check = { cmd = "ruff format --check", help = "Check code formatting" }
 
-lint-ruff = { cmd = "ruff check --fix src/", help = "Lint and auto-fix with Ruff" }
+lint-ruff = { cmd = "ruff check src tests", help = "Lint with Ruff" }
+lint-fix = { cmd = "ruff check src tests --fix", help = "Lint and auto-fix with Ruff" }
 lint-mypy = { cmd = "mypy --install-types --non-interactive", help = "Type check with mypy" }
 lint = { sequence = ["lint-ruff", "lint-mypy"], help = "Run all linters" }
 
 test = { cmd = "pytest", help = "Run tests with pytest" }
+check = { sequence = ["format-check", "lint", "test"], help = "Run format check, lint, and tests" }
 
 smoke = { shell = "python -c 'import uv_python_repo_template as p; p.main()'", help = "Run smoke test" }
 
@@ -152,15 +154,11 @@ changelog_file = "CHANGELOG.md"
 output_format = "md"
 
 [tool.semantic_release.branches.main]
-match = "master"
+match = "main"
 prerelease = false
 
 [tool.semantic_release.branches.dev]
 match = "dev"
-prerelease = false
-
-[tool.semantic_release.branches.release]
-match = "release/.+"
 prerelease = false
 
 [tool.semantic_release.remote]

@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  python-quality:
+    name: Python quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install dependencies
+        run: uv sync --frozen --group dev
+
+      - name: Check
+        run: uv run poe check
+
+  frontend-quality:
+    name: Frontend quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect frontend
+        id: frontend
+        run: |
+          if [ -f "src/frontend/package-lock.json" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            echo "dir=src/frontend" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Node
+        if: steps.frontend.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: src/frontend/package-lock.json
+
+      - name: Install dependencies
+        if: steps.frontend.outputs.present == 'true'
+        run: npm ci
+        working-directory: ${{ steps.frontend.outputs.dir }}
+
+      - name: Lint
+        if: steps.frontend.outputs.present == 'true'
+        run: npm run lint
+        working-directory: ${{ steps.frontend.outputs.dir }}
+
+      - name: Build
+        if: steps.frontend.outputs.present == 'true'
+        run: npm run build
+        working-directory: ${{ steps.frontend.outputs.dir }}
+
+  deploy-scripts:
+    name: Deploy script syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check shell syntax
+        run: |
+          shopt -s nullglob
+          scripts=(scripts/cicd/*.sh scripts/deploy/*.sh)
+          if [ "${#scripts[@]}" -eq 0 ]; then
+            echo "No deploy scripts found."
+            exit 0
+          fi
+          bash -n "${scripts[@]}"

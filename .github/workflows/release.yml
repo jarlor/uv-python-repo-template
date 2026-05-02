@@ -1,0 +1,170 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy_without_release:
+        description: Deploy current main without cutting a new release version
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore(release):')
+    outputs:
+      should_deploy: ${{ steps.deploy_gate.outputs.should_deploy }}
+      should_backmerge: ${{ steps.deploy_gate.outputs.should_backmerge }}
+      prod_deploy_enabled: ${{ steps.deploy_gate.outputs.prod_deploy_enabled }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate pushed commit messages
+        if: github.event_name == 'push'
+        env:
+          TARGET_BRANCH: main
+          COMMIT_RANGE: ${{ github.event.before }}..${{ github.sha }}
+        run: bash scripts/cicd/validate_commit_messages.sh
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install dependencies
+        run: uv sync --frozen --group dev
+
+      - name: Semantic Release
+        id: semrel
+        if: github.event_name != 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          output=$(uv run semantic-release version --changelog --push --tag --vcs-release 2>&1)
+          status=$?
+          set -e
+          echo "$output"
+          if echo "$output" | grep -qi "no release will be made"; then
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$status" -ne 0 ]; then
+            exit "$status"
+          fi
+          echo "released=true" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve deploy gate
+        id: deploy_gate
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ "${{ inputs.deploy_without_release }}" = "true" ]; then
+              echo "should_deploy=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "should_deploy=false" >> "$GITHUB_OUTPUT"
+            fi
+            echo "should_backmerge=false" >> "$GITHUB_OUTPUT"
+          elif [ "${{ steps.semrel.outputs.released }}" = "true" ]; then
+            echo "should_deploy=true" >> "$GITHUB_OUTPUT"
+            echo "should_backmerge=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_deploy=false" >> "$GITHUB_OUTPUT"
+            echo "should_backmerge=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ "${{ vars.PROD_DEPLOY_ENABLED }}" = "true" ]; then
+            echo "prod_deploy_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prod_deploy_enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  deploy-prod:
+    needs: release
+    if: needs.release.outputs.should_deploy == 'true' && needs.release.outputs.prod_deploy_enabled == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node when frontend is present
+        uses: actions/setup-node@v4
+        if: hashFiles('src/frontend/package-lock.json') != ''
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: src/frontend/package-lock.json
+
+      - name: Build frontend when present
+        if: hashFiles('src/frontend/package-lock.json') != ''
+        run: |
+          npm --prefix src/frontend ci --no-audit --no-fund
+          npm --prefix src/frontend run build
+
+      - name: Deploy production environment
+        env:
+          PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
+          PROD_SSH_USER: ${{ secrets.PROD_SSH_USER }}
+          PROD_SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
+          PROD_DEPLOY_PATH: ${{ vars.PROD_DEPLOY_PATH }}
+          PROD_SYSTEMD_SERVICE: ${{ vars.PROD_SYSTEMD_SERVICE }}
+          PROD_HEALTH_URL: ${{ vars.PROD_HEALTH_URL }}
+          PROD_REPOSITORY_URL: ${{ vars.PROD_REPOSITORY_URL }}
+        run: |
+          bash scripts/cicd/deploy_remote_release.sh \
+            --host "$PROD_SSH_HOST" \
+            --user "$PROD_SSH_USER" \
+            --key "$PROD_SSH_KEY" \
+            --deploy-path "${PROD_DEPLOY_PATH:-~/app}" \
+            --branch main \
+            --service "${PROD_SYSTEMD_SERVICE:-app}" \
+            --health-url "${PROD_HEALTH_URL:-http://127.0.0.1:8000/health}" \
+            --repository-url "${PROD_REPOSITORY_URL:-}"
+
+  backmerge:
+    needs:
+      - release
+      - deploy-prod
+    if: |
+      always() &&
+      needs.release.outputs.should_backmerge == 'true' &&
+      (
+        needs.release.outputs.prod_deploy_enabled != 'true' ||
+        needs.deploy-prod.result == 'success'
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Backmerge main into dev
+        run: bash scripts/cicd/backmerge_main_to_dev.sh

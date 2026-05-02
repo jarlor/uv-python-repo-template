@@ -1,0 +1,65 @@
+name: Deploy Test
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-test
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: vars.TEST_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Validate pushed commit messages
+        if: github.event_name == 'push'
+        env:
+          TARGET_BRANCH: dev
+          COMMIT_RANGE: ${{ github.event.before }}..${{ github.sha }}
+        run: bash scripts/cicd/validate_commit_messages.sh
+
+      - name: Set up Node when frontend is present
+        uses: actions/setup-node@v4
+        if: hashFiles('src/frontend/package-lock.json') != ''
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: src/frontend/package-lock.json
+
+      - name: Build frontend when present
+        if: hashFiles('src/frontend/package-lock.json') != ''
+        run: |
+          npm --prefix src/frontend ci --no-audit --no-fund
+          npm --prefix src/frontend run build
+
+      - name: Deploy test environment
+        env:
+          TEST_SSH_HOST: ${{ secrets.TEST_SSH_HOST }}
+          TEST_SSH_USER: ${{ secrets.TEST_SSH_USER }}
+          TEST_SSH_KEY: ${{ secrets.TEST_SSH_KEY }}
+          TEST_DEPLOY_PATH: ${{ vars.TEST_DEPLOY_PATH }}
+          TEST_SYSTEMD_SERVICE: ${{ vars.TEST_SYSTEMD_SERVICE }}
+          TEST_HEALTH_URL: ${{ vars.TEST_HEALTH_URL }}
+          TEST_REPOSITORY_URL: ${{ vars.TEST_REPOSITORY_URL }}
+        run: |
+          bash scripts/cicd/deploy_remote_release.sh \
+            --host "$TEST_SSH_HOST" \
+            --user "$TEST_SSH_USER" \
+            --key "$TEST_SSH_KEY" \
+            --deploy-path "${TEST_DEPLOY_PATH:-~/app-test}" \
+            --branch dev \
+            --service "${TEST_SYSTEMD_SERVICE:-app-test}" \
+            --health-url "${TEST_HEALTH_URL:-http://127.0.0.1:8000/health}" \
+            --repository-url "${TEST_REPOSITORY_URL:-}"

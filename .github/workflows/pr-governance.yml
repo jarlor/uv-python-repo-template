@@ -1,0 +1,38 @@
+name: PR Governance
+
+on:
+  pull_request:
+    branches: [dev, main]
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        env:
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+
+          conventional_regex='^(feat|fix|perf|docs|refactor|test|chore|ci|build|style|revert)(\([A-Za-z0-9._/-]+\))?!?: .+'
+          if [[ ! "$PR_TITLE" =~ $conventional_regex ]]; then
+            echo "PR title must follow Conventional Commit format."
+            echo "Examples: feat: add dashboard, fix(api): repair auth refresh"
+            echo "Actual: $PR_TITLE"
+            exit 1
+          fi
+
+          if [[ "$BASE_BRANCH" == "main" ]]; then
+            release_regex='^(feat|fix|perf)(\([A-Za-z0-9._/-]+\))?!?: .+'
+            if [[ ! "$PR_TITLE" =~ $release_regex ]]; then
+              echo "PRs into main must use a release-triggering Conventional Commit title."
+              echo "Allowed types: feat, fix, perf"
+              echo "Actual: $PR_TITLE"
+              exit 1
+            fi
+          fi
