@@ -26,4 +26,4 @@
 - [ ] PR 标题符合 Conventional Commits（用于自动版本）
 - [ ] 已说明风险与回滚
 - [ ] 证据完整且可复现
-- [ ] 遵守 `dev`/`master` 仅 PR 合并规则
+- [ ] 遵守 `dev`/`main` 仅 PR 合并规则

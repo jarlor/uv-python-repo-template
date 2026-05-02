@@ -6,207 +6,118 @@
 
 [中文文档](README_zh.md) | [Documentation](docs/)
 
-> A production-ready Python project template with automated CI/CD workflows, semantic versioning, and comprehensive quality gates.
+> A production-ready Python project template with uv, GitHub Actions, semantic release, and an opt-in deployment model for backend or full-stack projects.
 
-## ✨ What You Get
+## What You Get
 
-- **⚡ Lightning-fast Setup** - Get started in under 2 minutes with UV
-- **🤖 Automated Versioning** - Semantic versioning based on Conventional Commits
-- **🔒 Quality Gates** - Pre-commit hooks + PR gates (lint, test, type check)
-- **🚀 CI/CD Ready** - GitHub Actions workflows for dev/prod deployment
-- **📦 Auto-sync Branches** - Master changes automatically sync to dev
-- **📝 PR Templates** - Structured PR descriptions with checklists
-- **🏷️ Release Automation** - Auto-generate changelogs and GitHub releases
+- Fast setup with uv and a project rename initializer
+- `dev`/`main` Git model with PR and commit governance
+- CI for Python quality and optional frontend builds
+- Semantic-release changelog, tags, and GitHub Releases
+- Optional test and production deployment workflows
+- Backmerge from `main` to `dev` after semantic-release, gated by production deploy success when deployment is enabled
 
-## 🚀 Quick Start
-
-### 1. Use This Template
-
-Click "Use this template" on GitHub or:
+## Quick Start
 
 ```bash
 git clone https://github.com/jarlor/uv-python-repo-template.git my-project
 cd my-project
-```
-
-### 2. Install UV
-
-**macOS/Linux:**
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**macOS (Homebrew):**
-```bash
-brew install uv
-```
-
-**Windows:** See [UV installation guide](https://docs.astral.sh/uv/installation)
-
-### 3. Initialize Project
-
-```bash
 uv run poe init -y
 ```
 
-This will:
-- Rename the project to match your directory name
-- Set up `dev` and `master` branches
-- Install pre-commit hooks
-- Display post-init checklist
+The initializer renames the package to match your directory, keeps or creates `main`, creates `dev`, installs hooks, and prints the GitHub setup checklist.
 
-### 4. Start Developing
+Start work from `dev`:
 
 ```bash
-# Create a feature branch
-git checkout -b feature/my-feature
-
-# Make changes and commit
-git add .
+git switch dev
+git pull --ff-only origin dev
+git switch -c feature/my-feature
 git commit -m "feat: add new feature"
-
-# Push and create PR
 git push origin feature/my-feature
 ```
 
-## 📚 Documentation
+## Git Model
+
+`dev` is the integration branch. `main` is the production truth branch. `test` and `staging` are environments, not branches.
+
+```text
+feature/*, fix/*, docs/*, chore/*
+  -> PR to dev
+  -> Squash merge
+  -> CI + optional test deploy
+
+dev
+  -> PR to main
+  -> Create merge commit
+  -> semantic-release
+  -> optional prod deploy
+  -> backmerge main to dev after release, or after prod deploy success when enabled
+
+hotfix/*
+  -> branch from main
+  -> PR to main
+  -> Squash merge
+  -> semantic-release + optional prod deploy
+  -> backmerge main to dev
+```
+
+All PR titles must follow Conventional Commit format. PRs into `main` must use a release-triggering type: `feat:`, `fix:`, or `perf:`.
+
+## Workflow Profiles
+
+CI and governance are always on. Deployments are opt-in through GitHub Variables.
+
+| Profile | Variables | Behavior |
+| --- | --- | --- |
+| `ci-only` | none | CI, PR governance, commit governance, semantic release only |
+| `prod-only` | `PROD_DEPLOY_ENABLED=true` | Deploy production after a released `main` build |
+| `test-and-prod` | `TEST_DEPLOY_ENABLED=true`, `PROD_DEPLOY_ENABLED=true` | Deploy test from `dev`, production from released `main` |
+
+Common deployment variables:
+
+| Environment | Secrets | Variables |
+| --- | --- | --- |
+| Test | `TEST_SSH_HOST`, `TEST_SSH_USER`, `TEST_SSH_KEY` | `TEST_DEPLOY_ENABLED`, `TEST_DEPLOY_PATH`, `TEST_SYSTEMD_SERVICE`, `TEST_HEALTH_URL`, `TEST_REPOSITORY_URL` |
+| Production | `PROD_SSH_HOST`, `PROD_SSH_USER`, `PROD_SSH_KEY` | `PROD_DEPLOY_ENABLED`, `PROD_DEPLOY_PATH`, `PROD_SYSTEMD_SERVICE`, `PROD_HEALTH_URL`, `PROD_REPOSITORY_URL` |
+
+## Workflows
+
+- `ci.yml`: Python checks, optional frontend build, shell syntax checks
+- `pr-governance.yml`: PR title rules
+- `commit-governance.yml`: landed commit message rules on `dev` and `main`
+- `deploy-test.yml`: optional test/staging deploy from `dev`
+- `release.yml`: semantic-release and optional production deploy from `main`
+- `backmerge-main-to-dev.yml`: manual recovery backmerge
+
+## Commands
+
+```bash
+uv run poe format          # Format code with Ruff
+uv run poe format-check    # Check formatting
+uv run poe lint            # Ruff + mypy
+uv run poe test            # pytest
+uv run poe check           # format check + lint + test
+uv run poe smoke           # import smoke test
+uv run poe tag             # Preview the next semantic-release version
+uv run poe init -y         # Initialize a new project from the template
+```
+
+## Documentation
 
 | Document | Description |
-|----------|-------------|
-| [Getting Started](docs/getting-started.md) | Detailed setup and initialization guide |
-| [GitHub Setup](docs/github-setup.md) | Configure branch protection, secrets, and Actions |
-| [Development Workflow](docs/development-workflow.md) | Standard development process and best practices |
-| [Features](docs/features.md) | In-depth feature explanations |
+| --- | --- |
+| [Git workflow](docs/en/git-workflow.md) | Branch, PR, release, and backmerge rules |
+| [GitHub setup](docs/en/github-setup.md) | Branch protection, merge settings, secrets, and variables |
+| [Development workflow](docs/en/development-workflow.md) | Day-to-day feature, release, and hotfix flow |
+| [Features](docs/en/features.md) | Template capabilities and workflow overview |
 
-## 🎯 Key Features
-
-### Automated Workflows
-
-- **PR Gate** - Runs on every PR to `dev`/`master`
-  - Code formatting (Ruff)
-  - Linting (Ruff + mypy)
-  - Unit tests (pytest)
-  - Smoke tests
-
-- **Dev Deploy** - Triggers on merge to `dev`
-  - Auto-deploy to dev environment
-  - Health checks
-  - Rollback support
-
-- **Prod Deploy** - Triggers on tag push
-  - Build immutable artifacts
-  - Deploy to production
-  - Create GitHub Release
-  - Auto-sync to dev branch
-
-### Branch Strategy
-
-```
-feature/* → dev → master
-              ↓      ↓
-           dev env  prod env
-```
-
-**Branch Protection:**
-- `master` - **Hard protection** (GitHub): Requires PR + status checks
-- `dev` - **Soft protection** (local pre-push hook): Blocks direct push, allows auto-sync from master
-- Direct pushes blocked, PR workflow enforced
-
-**Why this approach?**
-- Master protection is critical for production code quality
-- Dev protection is flexible to allow automated master → dev sync
-- No complex GitHub App setup needed for branch synchronization
-
-### Commit Convention
-
-Follow [Conventional Commits](https://www.conventionalcommits.org):
-
-```
-<type>(<scope>): <subject>
-```
-
-**Version Impact:**
-- `feat:` → Minor version bump (v1.2.3 → v1.3.0)
-- `fix:` → Patch version bump (v1.2.3 → v1.2.4)
-- `feat!:` or `BREAKING CHANGE:` → Major version bump (v1.2.3 → v2.0.0)
-
-### Release Process
-
-```bash
-# 1. Run tests and validate
-uv run poe tag
-# This will:
-# - Run lint/test/smoke checks
-# - Calculate next version
-# - Show next steps
-
-# 2. Create release branch
-git checkout -b release/v1.7.0
-
-# 3. Push branch and create PR
-git push origin release/v1.7.0
-gh pr create --title "chore: release v1.7.0" --base master
-
-# 4. Merge PR
-# → GitHub Actions automatically:
-#    - Runs semantic-release version
-#    - Updates pyproject.toml, CHANGELOG.md, uv.lock
-#    - Creates commit and tag
-#    - Creates GitHub Release with detailed changelog
-#    - Syncs changes to dev
-```
-
-**Key Points:**
-- ✅ Simple local workflow - just run tests
-- ✅ Automatic version calculation from conventional commits
-- ✅ Automatic CHANGELOG generation with detailed commit history
-- ✅ All file modifications happen in CI (consistent and reliable)
-- ✅ Tags and releases created automatically after PR merge
-- ✅ Full audit trail with categorized changes (feat/fix/breaking)
-
-**See Also:** [Release Workflow Improvements](docs/en/release-workflow-improvements.md)
-
-## 🛠️ Available Commands
-
-```bash
-# Development
-uv run poe format          # Format code with Ruff
-uv run poe lint            # Run linters (Ruff + mypy)
-uv run poe test            # Run tests with pytest
-uv run poe smoke           # Run smoke tests
-
-# Release
-uv run poe tag             # Prepare release (auto version)
-uv run poe tag --version 1.7.0  # Prepare release (manual version)
-
-# Setup
-uv run poe init -y         # Initialize project (first-time setup)
-```
-
-## 📋 Requirements
+## Requirements
 
 - Python 3.10+
-- UV 0.5.0+
+- uv 0.5.0+
 - Git
 
-## 🤝 Contributing
-
-This is a template repository. Feel free to fork and customize for your needs.
-
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
-## 🙏 Acknowledgments
-
-Original inspiration from [python-repo-template](https://github.com/GiovanniGiacometti/python-repo-template).
-
-## 📞 Support
-
-- [Documentation](docs/)
-- [Issues](https://github.com/jarlor/uv-python-repo-template/issues)
-- [Discussions](https://github.com/jarlor/uv-python-repo-template/discussions)
-
----
-
-**Made with ❤️ using [UV](https://github.com/astral-sh/uv)**

@@ -6,203 +6,119 @@
 
 [English](README.md) | [文档](docs/)
 
-> 生产就绪的 Python 项目模板，包含自动化 CI/CD 工作流、语义化版本控制和完善的质量门禁。
+> 基于 uv 的生产项目模板，内置 GitHub Actions、语义化发版、Git 治理，以及可选启用的测试/生产部署流程。
 
-## ✨ 开箱即用
+## 开箱能力
 
-- **⚡ 极速启动** - 使用 UV 在 2 分钟内完成初始化
-- **🤖 自动版本管理** - 基于 Conventional Commits 的语义化版本控制
-- **🔒 质量门禁** - Pre-commit hooks + PR 门禁（lint、test、类型检查）
-- **🚀 CI/CD 就绪** - GitHub Actions 工作流支持 dev/prod 部署
-- **📦 分支自动同步** - Master 改动自动同步到 dev
-- **📝 PR 模板** - 结构化的 PR 描述和检查清单
-- **🏷️ 发版自动化** - 自动生成 changelog 和 GitHub Release
+- 使用 uv 快速初始化并重命名项目
+- `dev`/`main` 双长期分支模型
+- PR title 和落地 commit 双重治理
+- Python CI 和可选前端构建
+- semantic-release 自动生成 changelog、tag 和 GitHub Release
+- 测试环境和生产环境部署均为显式 opt-in
+- semantic-release 成功后自动 `main -> dev` backmerge；启用生产部署时需等部署成功
 
-## 🚀 快速开始
-
-### 1. 使用此模板
-
-在 GitHub 点击 "Use this template" 或：
+## 快速开始
 
 ```bash
 git clone https://github.com/jarlor/uv-python-repo-template.git my-project
 cd my-project
-```
-
-### 2. 安装 UV
-
-**macOS/Linux:**
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**macOS (Homebrew):**
-```bash
-brew install uv
-```
-
-**Windows:** 参考 [UV 安装指南](https://docs.astral.sh/uv/installation)
-
-### 3. 初始化项目
-
-```bash
 uv run poe init -y
 ```
 
-这将会：
-- 将项目重命名为你的目录名
-- 设置 `dev` 和 `master` 分支
-- 安装 pre-commit hooks
-- 显示初始化后的检查清单
+初始化会把包名改成当前目录名，保留或创建 `main`，创建 `dev`，安装 hooks，并输出 GitHub 配置清单。
 
-### 4. 开始开发
+日常开发从 `dev` 拉短分支：
 
 ```bash
-# 创建 feature 分支
-git checkout -b feature/my-feature
-
-# 修改代码并提交
-git add .
-git commit -m "feat: 添加新功能"
-
-# 推送并创建 PR
+git switch dev
+git pull --ff-only origin dev
+git switch -c feature/my-feature
+git commit -m "feat: add new feature"
 git push origin feature/my-feature
 ```
 
-## 📚 文档
+## Git 模型
+
+`dev` 是集成分支，`main` 是生产事实分支。`test`/`staging` 是环境，不是 Git 分支。
+
+```text
+feature/*, fix/*, docs/*, chore/*
+  -> PR 到 dev
+  -> Squash merge
+  -> CI + 可选测试环境部署
+
+dev
+  -> PR 到 main
+  -> Create merge commit
+  -> semantic-release
+  -> 可选生产部署
+  -> release 成功后 backmerge main 到 dev；启用生产部署时需等部署成功
+
+hotfix/*
+  -> 从 main 拉分支
+  -> PR 到 main
+  -> Squash merge
+  -> semantic-release + 可选生产部署
+  -> backmerge main 到 dev
+```
+
+所有 PR title 必须符合 Conventional Commit。进入 `main` 的 PR title 必须使用会触发发版的类型：`feat:`、`fix:` 或 `perf:`。
+
+## 部署 Profile
+
+CI 和 Git 治理默认启用。部署能力通过 GitHub Variables 显式开启。
+
+| Profile | Variables | 行为 |
+| --- | --- | --- |
+| `ci-only` | 无 | 只跑 CI、治理和 semantic-release |
+| `prod-only` | `PROD_DEPLOY_ENABLED=true` | `main` 发版后部署生产 |
+| `test-and-prod` | `TEST_DEPLOY_ENABLED=true`, `PROD_DEPLOY_ENABLED=true` | `dev` 部署测试，`main` 发版后部署生产 |
+
+常用部署配置：
+
+| 环境 | Secrets | Variables |
+| --- | --- | --- |
+| 测试 | `TEST_SSH_HOST`, `TEST_SSH_USER`, `TEST_SSH_KEY` | `TEST_DEPLOY_ENABLED`, `TEST_DEPLOY_PATH`, `TEST_SYSTEMD_SERVICE`, `TEST_HEALTH_URL`, `TEST_REPOSITORY_URL` |
+| 生产 | `PROD_SSH_HOST`, `PROD_SSH_USER`, `PROD_SSH_KEY` | `PROD_DEPLOY_ENABLED`, `PROD_DEPLOY_PATH`, `PROD_SYSTEMD_SERVICE`, `PROD_HEALTH_URL`, `PROD_REPOSITORY_URL` |
+
+## Workflows
+
+- `ci.yml`：Python 检查、可选前端构建、shell 语法检查
+- `pr-governance.yml`：PR title 规则
+- `commit-governance.yml`：`dev`/`main` 落地 commit 规则
+- `deploy-test.yml`：从 `dev` 可选部署测试/预发环境
+- `release.yml`：从 `main` semantic-release，并可选部署生产
+- `backmerge-main-to-dev.yml`：手动应急 backmerge
+
+## 常用命令
+
+```bash
+uv run poe format          # 使用 Ruff 格式化代码
+uv run poe format-check    # 检查格式
+uv run poe lint            # Ruff + mypy
+uv run poe test            # pytest
+uv run poe check           # 格式检查 + lint + test
+uv run poe smoke           # import 冒烟测试
+uv run poe tag             # 预览下一次 semantic-release 版本
+uv run poe init -y         # 初始化新项目
+```
+
+## 文档
 
 | 文档 | 说明 |
-|------|------|
-| [快速开始](docs/getting-started.zh.md) | 详细的设置和初始化指南 |
-| [GitHub 设置](docs/github-setup.zh.md) | 配置分支保护、Secrets 和 Actions |
-| [开发流程](docs/development-workflow.zh.md) | 标准开发流程和最佳实践 |
-| [功能特性](docs/features.zh.md) | 深入的功能说明 |
+| --- | --- |
+| [Git 工作流](docs/zh/git-workflow.zh.md) | 分支、PR、发版和 backmerge 规则 |
+| [GitHub 设置](docs/zh/github-setup.zh.md) | 分支保护、merge 设置、secrets 和 variables |
+| [开发流程](docs/zh/development-workflow.zh.md) | 日常功能、发版和 hotfix 流程 |
+| [功能特性](docs/zh/features.zh.md) | 模板能力和 workflow 概览 |
 
-## 🎯 核心功能
-
-### 自动化工作流
-
-- **PR Gate** - 每个 PR 到 `dev`/`master` 时运行
-  - 代码格式化（Ruff）
-  - 代码检查（Ruff + mypy）
-  - 单元测试（pytest）
-  - 冒烟测试
-
-- **Dev Deploy** - 合并到 `dev` 时触发
-  - 自动部署到 dev 环境
-  - 健康检查
-  - 回滚支持
-
-- **Prod Deploy** - 推送 tag 时触发
-  - 构建不可变制品
-  - 部署到生产环境
-  - 创建 GitHub Release
-  - 自动同步到 dev 分支
-
-### 分支策略
-
-```
-feature/* → dev → master
-              ↓      ↓
-           dev 环境  生产环境
-```
-
-**分支保护：**
-- `master` - **硬保护**（GitHub）：要求 PR + 状态检查通过
-- `dev` - **软保护**（本地 pre-push hook）：阻止直接推送，允许从 master 自动同步
-- 禁止直接推送，强制 PR 工作流
-
-**为什么采用这种方式？**
-- Master 保护对生产代码质量至关重要
-- Dev 保护更灵活，允许 master → dev 自动同步
-- 无需复杂的 GitHub App 配置即可实现分支同步
-
-### 提交规范
-
-遵循 [Conventional Commits](https://www.conventionalcommits.org)：
-
-```
-<类型>(<范围>): <主题>
-```
-
-**版本影响：**
-- `feat:` → 次版本号升级（v1.2.3 → v1.3.0）
-- `fix:` → 补丁版本号升级（v1.2.3 → v1.2.4）
-- `feat!:` 或 `BREAKING CHANGE:` → 主版本号升级（v1.2.3 → v2.0.0）
-
-### 发版流程
-
-**自动版本管理（默认）：**
-```bash
-# 在 master 分支
-uv run poe tag
-
-# 推送 tags
-git push origin master --tags
-```
-
-这将自动：
-1. 根据提交历史计算下一个版本
-2. 更新 `CHANGELOG.md`
-3. 创建 git tag
-4. 触发生产环境部署
-5. 创建 GitHub Release
-6. 将改动同步回 dev
-
-**手动版本管理（必要时）：**
-```bash
-# 手动指定版本号
-uv run poe tag --version 1.5.0
-
-# 推送 tags
-git push origin master --tags
-```
-
-使用手动版本管理的场景：
-- semantic-release 拒绝创建新版本
-- 只有文档更新没有功能变更
-- 需要指定特定的版本号
-
-## 🛠️ 可用命令
-
-```bash
-# 开发
-uv run poe format          # 使用 Ruff 格式化代码
-uv run poe lint            # 运行 linters（Ruff + mypy）
-uv run poe test            # 使用 pytest 运行测试
-uv run poe smoke           # 运行冒烟测试
-
-# 发版
-uv run poe tag             # 创建版本 tag 并更新 changelog
-
-# 设置
-uv run poe init -y         # 初始化项目（首次设置）
-```
-
-## 📋 环境要求
+## 环境要求
 
 - Python 3.10+
-- UV 0.5.0+
+- uv 0.5.0+
 - Git
 
-## 🤝 贡献
-
-这是一个模板仓库。欢迎 fork 并根据你的需求自定义。
-
-## 📄 许可证
+## 许可证
 
 MIT License - 详见 [LICENSE](LICENSE)
-
-## 🙏 致谢
-
-灵感来源于 [python-repo-template](https://github.com/GiovanniGiacometti/python-repo-template)。
-
-## 📞 支持
-
-- [文档](docs/)
-- [Issues](https://github.com/jarlor/uv-python-repo-template/issues)
-- [Discussions](https://github.com/jarlor/uv-python-repo-template/discussions)
-
----
-
-**使用 [UV](https://github.com/astral-sh/uv) 构建，用 ❤️ 制作**
