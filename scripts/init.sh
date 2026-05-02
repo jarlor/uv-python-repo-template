@@ -160,7 +160,7 @@ cat <<'EOF'
   ☐ Optional test deploy: TEST_DEPLOY_ENABLED=true plus TEST_* secrets/vars
   ☐ Optional prod deploy: PROD_DEPLOY_ENABLED=true plus PROD_* secrets/vars
   
-  See docs/en/github-setup.md for common deployment secret examples
+  See docs/en/ci-cd.md for common deployment secret examples
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF

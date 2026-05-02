@@ -1,4 +1,4 @@
-# UV Python Repository Template
+# Vibecoding Python Starter
 
 [![Built with UV](https://img.shields.io/badge/built%20with-uv-7966C7)](https://github.com/astral-sh/uv)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196)](https://www.conventionalcommits.org)
@@ -6,11 +6,12 @@
 
 [中文文档](README_zh.md) | [Documentation](docs/)
 
-> A production-ready Python project template with uv, GitHub Actions, semantic release, and an opt-in deployment model for backend or full-stack projects.
+> A minimal Python starter for vibecoding: clean uv defaults, agent-facing instructions, strict Git workflow, CI governance, and opt-in deployment.
 
 ## What You Get
 
 - Fast setup with uv and a project rename initializer
+- `AGENTS.md` so AI coding agents know the repository rules immediately
 - `dev`/`main` Git model with PR and commit governance
 - CI for Python quality and optional frontend builds
 - Semantic-release changelog, tags, and GitHub Releases
@@ -66,22 +67,15 @@ All PR titles must follow Conventional Commit format. PRs into `main` must use a
 
 ## Workflow Profiles
 
-CI and governance are always on. Deployments are opt-in through GitHub Variables.
+CI and governance are always on. Deployments and release automation are opt-in through GitHub Variables.
 
 | Profile | Variables | Behavior |
 | --- | --- | --- |
-| `ci-only` | none | CI, PR governance, commit governance, semantic release only |
+| `ci-only` | none | CI, PR governance, and commit governance |
 | `prod-only` | `PROD_DEPLOY_ENABLED=true` | Deploy production after a released `main` build |
 | `test-and-prod` | `TEST_DEPLOY_ENABLED=true`, `PROD_DEPLOY_ENABLED=true` | Deploy test from `dev`, production from released `main` |
 
-Common deployment variables:
-
-| Environment | Secrets | Variables |
-| --- | --- | --- |
-| Test | `TEST_SSH_HOST`, `TEST_SSH_USER`, `TEST_SSH_KEY` | `TEST_DEPLOY_ENABLED`, `TEST_DEPLOY_PATH`, `TEST_SYSTEMD_SERVICE`, `TEST_HEALTH_URL`, `TEST_REPOSITORY_URL` |
-| Production | `PROD_SSH_HOST`, `PROD_SSH_USER`, `PROD_SSH_KEY` | `PROD_DEPLOY_ENABLED`, `PROD_DEPLOY_PATH`, `PROD_SYSTEMD_SERVICE`, `PROD_HEALTH_URL`, `PROD_REPOSITORY_URL` |
-
-Semantic-release is also opt-in. Set `RELEASE_ENABLED=true` and provide `RELEASE_TOKEN` when the repository rules allow that token to push release commits and tags to `main`.
+See [CI/CD configuration](docs/en/ci-cd.md) for the exact secrets and variables.
 
 ## Workflows
 
@@ -105,14 +99,14 @@ uv run poe tag             # Preview the next semantic-release version
 uv run poe init -y         # Initialize a new project from the template
 ```
 
-## Documentation
+## What To Keep
 
 | Document | Description |
 | --- | --- |
+| [Agent guide](AGENTS.md) | First-read instructions for AI coding agents |
+| [Quickstart](docs/en/quickstart.md) | Initialize a new project and configure GitHub |
 | [Git workflow](docs/en/git-workflow.md) | Branch, PR, release, and backmerge rules |
-| [GitHub setup](docs/en/github-setup.md) | Branch protection, merge settings, secrets, and variables |
-| [Development workflow](docs/en/development-workflow.md) | Day-to-day feature, release, and hotfix flow |
-| [Features](docs/en/features.md) | Template capabilities and workflow overview |
+| [CI/CD configuration](docs/en/ci-cd.md) | Workflow behavior, secrets, and variables |
 
 ## Requirements
 

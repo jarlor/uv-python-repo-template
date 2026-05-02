@@ -1,4 +1,4 @@
-# UV Python 项目模板
+# Vibecoding Python 起步仓库
 
 [![Built with UV](https://img.shields.io/badge/built%20with-uv-7966C7)](https://github.com/astral-sh/uv)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196)](https://www.conventionalcommits.org)
@@ -6,11 +6,12 @@
 
 [English](README.md) | [文档](docs/)
 
-> 基于 uv 的生产项目模板，内置 GitHub Actions、语义化发版、Git 治理，以及可选启用的测试/生产部署流程。
+> 面向 vibecoding 的最小 Python 起步仓库：干净的 uv 默认配置、agent 入口文档、严格 Git 工作流、CI 治理，以及可选部署。
 
 ## 开箱能力
 
 - 使用 uv 快速初始化并重命名项目
+- `AGENTS.md` 让 AI coding agent 进仓库后先读规则
 - `dev`/`main` 双长期分支模型
 - PR title 和落地 commit 双重治理
 - Python CI 和可选前端构建
@@ -67,22 +68,15 @@ hotfix/*
 
 ## 部署 Profile
 
-CI 和 Git 治理默认启用。部署能力通过 GitHub Variables 显式开启。
+CI 和 Git 治理默认启用。部署和 release 自动化通过 GitHub Variables 显式开启。
 
 | Profile | Variables | 行为 |
 | --- | --- | --- |
-| `ci-only` | 无 | 只跑 CI、治理和 semantic-release |
+| `ci-only` | 无 | 只跑 CI、PR governance 和 commit governance |
 | `prod-only` | `PROD_DEPLOY_ENABLED=true` | `main` 发版后部署生产 |
 | `test-and-prod` | `TEST_DEPLOY_ENABLED=true`, `PROD_DEPLOY_ENABLED=true` | `dev` 部署测试，`main` 发版后部署生产 |
 
-常用部署配置：
-
-| 环境 | Secrets | Variables |
-| --- | --- | --- |
-| 测试 | `TEST_SSH_HOST`, `TEST_SSH_USER`, `TEST_SSH_KEY` | `TEST_DEPLOY_ENABLED`, `TEST_DEPLOY_PATH`, `TEST_SYSTEMD_SERVICE`, `TEST_HEALTH_URL`, `TEST_REPOSITORY_URL` |
-| 生产 | `PROD_SSH_HOST`, `PROD_SSH_USER`, `PROD_SSH_KEY` | `PROD_DEPLOY_ENABLED`, `PROD_DEPLOY_PATH`, `PROD_SYSTEMD_SERVICE`, `PROD_HEALTH_URL`, `PROD_REPOSITORY_URL` |
-
-semantic-release 也需要显式启用。仓库规则允许某个 token 向 `main` 推 release commit 和 tag 后，设置 `RELEASE_ENABLED=true` 并提供 `RELEASE_TOKEN`。
+具体 secrets 和 variables 见 [CI/CD 配置](docs/zh/ci-cd.zh.md)。
 
 ## Workflows
 
@@ -106,14 +100,14 @@ uv run poe tag             # 预览下一次 semantic-release 版本
 uv run poe init -y         # 初始化新项目
 ```
 
-## 文档
+## 应该保留的文档
 
 | 文档 | 说明 |
 | --- | --- |
+| [Agent guide](AGENTS.md) | AI coding agent 第一入口 |
+| [快速开始](docs/zh/quickstart.zh.md) | 初始化新项目并配置 GitHub |
 | [Git 工作流](docs/zh/git-workflow.zh.md) | 分支、PR、发版和 backmerge 规则 |
-| [GitHub 设置](docs/zh/github-setup.zh.md) | 分支保护、merge 设置、secrets 和 variables |
-| [开发流程](docs/zh/development-workflow.zh.md) | 日常功能、发版和 hotfix 流程 |
-| [功能特性](docs/zh/features.zh.md) | 模板能力和 workflow 概览 |
+| [CI/CD 配置](docs/zh/ci-cd.zh.md) | Workflow 行为、secrets 和 variables |
 
 ## 环境要求
 
