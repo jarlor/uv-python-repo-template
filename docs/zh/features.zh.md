@@ -22,6 +22,7 @@
 - 发版从 `main` 运行。
 - 没有新版本时不会部署。
 - GitHub tag 和 Release 由 release workflow 创建。
+- 未配置 `RELEASE_ENABLED=true` 和 `RELEASE_TOKEN` 前，自动发版保持关闭。
 
 ## 可选部署
 

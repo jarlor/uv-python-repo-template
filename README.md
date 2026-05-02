@@ -81,6 +81,8 @@ Common deployment variables:
 | Test | `TEST_SSH_HOST`, `TEST_SSH_USER`, `TEST_SSH_KEY` | `TEST_DEPLOY_ENABLED`, `TEST_DEPLOY_PATH`, `TEST_SYSTEMD_SERVICE`, `TEST_HEALTH_URL`, `TEST_REPOSITORY_URL` |
 | Production | `PROD_SSH_HOST`, `PROD_SSH_USER`, `PROD_SSH_KEY` | `PROD_DEPLOY_ENABLED`, `PROD_DEPLOY_PATH`, `PROD_SYSTEMD_SERVICE`, `PROD_HEALTH_URL`, `PROD_REPOSITORY_URL` |
 
+Semantic-release is also opt-in. Set `RELEASE_ENABLED=true` and provide `RELEASE_TOKEN` when the repository rules allow that token to push release commits and tags to `main`.
+
 ## Workflows
 
 - `ci.yml`: Python checks, optional frontend build, shell syntax checks

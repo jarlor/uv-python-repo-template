@@ -22,6 +22,7 @@
 - Releases run from `main`.
 - No-release changes stop before deployment.
 - GitHub tags and releases are created by the release workflow.
+- Release automation is disabled until `RELEASE_ENABLED=true` and `RELEASE_TOKEN` are configured.
 
 ## Optional Deployments
 
