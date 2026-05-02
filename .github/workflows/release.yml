@@ -21,7 +21,7 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore(release):')
+    if: vars.RELEASE_ENABLED == 'true' && (github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore(release):'))
     outputs:
       should_deploy: ${{ steps.deploy_gate.outputs.should_deploy }}
       should_backmerge: ${{ steps.deploy_gate.outputs.should_backmerge }}
@@ -32,7 +32,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Validate pushed commit messages
         if: github.event_name == 'push'
@@ -56,8 +56,12 @@ jobs:
         id: semrel
         if: github.event_name != 'workflow_dispatch'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "RELEASE_TOKEN is required when RELEASE_ENABLED=true." >&2
+            exit 1
+          fi
           set +e
           output=$(uv run semantic-release version --changelog --push --tag --vcs-release 2>&1)
           status=$?
@@ -159,7 +163,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Configure Git
         run: |

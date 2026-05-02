@@ -52,3 +52,10 @@ Production:
 - Variable: `PROD_REPOSITORY_URL`
 
 Leave `TEST_DEPLOY_ENABLED` unset when the project has no test server. Leave `PROD_DEPLOY_ENABLED` unset when releases should create tags and GitHub Releases without deploying a host.
+
+Semantic-release:
+
+- Secret: `RELEASE_TOKEN`
+- Variable: `RELEASE_ENABLED`
+
+`RELEASE_TOKEN` must be allowed by the repository ruleset to push release commits and tags to `main`. Leave `RELEASE_ENABLED` unset until that bypass or permission model is configured.
