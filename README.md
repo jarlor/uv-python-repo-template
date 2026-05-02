@@ -4,7 +4,7 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196)](https://www.conventionalcommits.org)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-[中文文档](README_zh.md) | [Documentation](docs/)
+[Documentation](docs/)
 
 > A minimal Python starter for vibecoding: clean uv defaults, agent-facing instructions, strict Git workflow, CI governance, and opt-in deployment.
 
